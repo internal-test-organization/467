@@ -13098,6 +13098,7 @@ module.exports = class Organization {
       .then(workflowruns => {
         console.log(`Processing ${workflowruns.length} workflow runs`);
         console.log(workflowruns.total_count);
+        console.log(workflowruns)
         return workflowruns.total_count
       });
     }
