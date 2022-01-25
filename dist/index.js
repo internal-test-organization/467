@@ -13434,11 +13434,12 @@ for(org of orgs){
     userlists = await orgActivity1.getOrgMembers(org);
     console.log(userlists)
     userlists.map((item) => {
-        userlist.push(item.name)
+        userlist.push(item.login)
         console.log(userlist,"user list")
     })
 }
 
+console.log(userlist)
 }
 
 async function execute() {
