@@ -13454,9 +13454,11 @@ for(org of orgs){
     })
     
     for(repos of repolist ){
+        console.log(repos)
         workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
         console.log(workflowruns,"workflow runs total count")
         total += workflowruns;
+
         continue;
     }
     console.log(total)
