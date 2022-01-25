@@ -13093,6 +13093,17 @@ module.exports = class Organization {
       });
     }
     
+    getWorkFlowRuns(org, reponame) {
+      return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/runs', {owner: org,repo: reponame,per_page: 100})
+      .then(workflowruns => {
+        console.log(`Processing ${workflowruns.length} workflow runs`);
+        return workflowruns.map(workflowrun => {
+          return {
+            name: workflowrun.total_count,
+          };
+        });
+      });
+    }
     getOrgs(org) {
       return this.octokit.paginate("GET /orgs/:org",
         {
@@ -13430,6 +13441,7 @@ orglists.map((item) => {
 
 let userlist = [];
 let repolist = [];
+let workflowrun  = [];
 for(org of orgs){
     console.log(orglists)
     userlists = await orgActivity1.getOrgMembers(org); //user list
@@ -13442,10 +13454,17 @@ for(org of orgs){
     repolists.map((item) => {
         repolist.push(item.name)
     })
+    for(repos of repolist )
+    workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
+    console.log(workflowruns,"workflow runs total count")
+    workflowruns.map((item) => {
+        workflowrun.map(item.name)
+    })
 }
 
 console.log(userlist,"final user list")
 console.log(repolist,"final repo list")
+console.log(workflowrun,"final workflow count array")
 let uniqueRepos = [...new Set(repolist)];
 let uniqueUsers = [...new Set(userlist)];
 console.log(uniqueUsers);

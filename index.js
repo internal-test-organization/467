@@ -64,6 +64,7 @@ orglists.map((item) => {
 
 let userlist = [];
 let repolist = [];
+let workflowrun  = [];
 for(org of orgs){
     console.log(orglists)
     userlists = await orgActivity1.getOrgMembers(org); //user list
@@ -76,10 +77,17 @@ for(org of orgs){
     repolists.map((item) => {
         repolist.push(item.name)
     })
+    for(repos of repolist )
+    workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
+    console.log(workflowruns,"workflow runs total count")
+    workflowruns.map((item) => {
+        workflowrun.map(item.name)
+    })
 }
 
 console.log(userlist,"final user list")
 console.log(repolist,"final repo list")
+console.log(workflowrun,"final workflow count array")
 let uniqueRepos = [...new Set(repolist)];
 let uniqueUsers = [...new Set(userlist)];
 console.log(uniqueUsers);

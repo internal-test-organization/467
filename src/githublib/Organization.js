@@ -86,6 +86,17 @@ module.exports = class Organization {
       });
     }
     
+    getWorkFlowRuns(org, reponame) {
+      return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/runs', {owner: org,repo: reponame,per_page: 100})
+      .then(workflowruns => {
+        console.log(`Processing ${workflowruns.length} workflow runs`);
+        return workflowruns.map(workflowrun => {
+          return {
+            name: workflowrun.total_count,
+          };
+        });
+      });
+    }
     getOrgs(org) {
       return this.octokit.paginate("GET /orgs/:org",
         {
