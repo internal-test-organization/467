@@ -71,24 +71,7 @@ for (org of orgs){
         console.log(userlist,"user list")
     })
 }
-
-
-// saveIntermediateData(outputDir, finaloutput);
-
-
-// function saveIntermediateData(directory, data) {
-//   try {
-//     const file = path.join(directory, 'org-overriden-secret.json');
-//     fs.writeFileSync(file, JSON.stringify(data));
-//     core.setOutput('report_json', file);
-//   } catch (err) {
-//     console.error(`Failed to save intermediate data: ${err}`);
-//   }
-// }
-
-// core.setOutput('repos',orgrepos);
-// core.setOutput('secret',secrets);
-// core.setOutput('report',finaloutput);
+    
 }
 
 async function execute() {
