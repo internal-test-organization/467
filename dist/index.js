@@ -13421,7 +13421,7 @@ const octokit = githubClient.create(token, maxRetries)
 ////find the organization list
 
 
-
+let orgs = [];
 const orglists = await orgActivity1.getUserOrgs()
 orglists.map((item) => {
     orgs.push(item.name)
