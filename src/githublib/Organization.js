@@ -92,7 +92,7 @@ module.exports = class Organization {
         console.log(`Processing ${workflowruns.length} workflow runs`);
         return workflowruns.map(workflowrun => {
           return {
-            name: workflowrun.total_count,
+            name: workflowruns.length,
           };
         });
       });
