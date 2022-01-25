@@ -79,12 +79,13 @@ for(org of orgs){
         repolist.push(item.name)
     })
     
-    for(repos of repolist )
-    workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
-    console.log(workflowruns,"workflow runs total count")
-    workflowruns.map((item) => {
-        workflowrun.map(item.name)
-    })
+    for(repos of repolist ){
+        workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
+        console.log(workflowruns,"workflow runs total count")
+        workflowruns.map((item) => {
+            workflowrun.map(item.name)
+        })
+    }
 }
 
 console.log(userlist,"final user list")
