@@ -67,8 +67,8 @@ let repolist = [];
 let workflowrun  = [];
 let total = 0 ;
 for(org of orgs){
+    let lRepoList = [];
     console.log(org)
-    
     userlists = await orgActivity1.getOrgMembers(org); //user list
     console.log(userlists)
     userlists.map((item) => {
@@ -78,9 +78,10 @@ for(org of orgs){
     console.log(repolists)
     repolists.map((item) => {
         repolist.push(item.name)
+        lRepoList.push(item.name)
     })
     
-    for(repos of repolist ){
+    for(repos of lRepoList ){
         console.log(repos)
         workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
         console.log(workflowruns,"workflow runs total count")
