@@ -13437,12 +13437,12 @@ orglists.map((item) => {
 })
 
 let userlist = [];
-
+let repolist = [];
 let workflowrun  = [];
 let total = 0 ;
 for(org of orgs){
     console.log(org)
-    let repolist = [];
+    
     userlists = await orgActivity1.getOrgMembers(org); //user list
     console.log(userlists)
     userlists.map((item) => {
