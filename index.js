@@ -54,7 +54,7 @@ const octokit = githubClient.create(token, maxRetries)
 
 ////find the organization list
 
-let orgs = [];
+
 
 const orglists = await orgActivity1.getUserOrgs()
 orglists.map((item) => {
@@ -63,7 +63,7 @@ orglists.map((item) => {
 })
 
 let userlist = [];
-for (org of orgs){
+for(org of orglists){
     userlists = await orgActivity1.getOrgMembers(org);
     console.log(userlists)
     userlists.map((item) => {
@@ -71,7 +71,7 @@ for (org of orgs){
         console.log(userlist,"user list")
     })
 }
-    
+
 }
 
 async function execute() {
