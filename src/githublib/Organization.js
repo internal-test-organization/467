@@ -90,7 +90,11 @@ module.exports = class Organization {
       return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/runs', {owner: org,repo: reponame,per_page: 100})
       .then(workflowruns => {
         console.log(`Processing ${workflowruns.length} workflow runs`);
-        return workflowruns.length
+        return workflowruns.map(workflowrun => {
+          return {
+            name: workflowrun.name,
+          };
+        });
         });
     }
     getOrgs(org) {
