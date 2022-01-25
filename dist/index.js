@@ -13092,7 +13092,13 @@ module.exports = class Organization {
         });
       });
     }
-    
+    getWorkflows(org,reponame){
+      return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/workflows', {owner: org,repo: reponame,per_page: 100})
+      .then(workflows => {
+        console.log(`Processing ${workflows.length} workflow runs`);
+        return workflows.length
+      });
+    }
     getWorkFlowRuns(org, reponame) {
       return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/runs', {owner: org,repo: reponame,per_page: 100})
       .then(workflowruns => {
@@ -13439,7 +13445,8 @@ orglists.map((item) => {
 let userlist = [];
 let repolist = [];
 let workflowrun  = [];
-let totalworkflowcount = 0 ;
+let totalworkflowscount = 0 ;
+let totalworkflowrunscount = 0;
 for(org of orgs){
     let lRepoList = [];
     console.log(org)
@@ -13459,9 +13466,13 @@ for(org of orgs){
         console.log(repos)
         workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
         console.log(workflowruns,"workflow runs total count")
-        totalworkflowcount += workflowruns;
+        totalworkflowrunscount += workflowruns;
 
-        continue;
+        workflowruns = await orgActivity1.getWorkflows(org,repos);
+        console.log(workflows,"workflow runs total count")
+        totalworkflowscount += workflows;
+
+    
     }
     console.log(total)
 }
@@ -13472,10 +13483,12 @@ console.log(totalworkflowcount,"final workflow count array")
 let uniqueRepos = [...new Set(repolist)];
 let uniqueUsers = [...new Set(userlist)];
 console.log(uniqueUsers);
-console.log(uniqueUsers.length);
 console.log(uniqueRepos);
+console.log(org.length);
+console.log(uniqueUsers.length);
 console.log(uniqueRepos.length);
-console.log(totalworkflowcount,"final workflow count array")
+console.log(totalworkflowrunscount,"finaloup");
+console.log(totalworkflowcount,"final workflow count array");
 }
 
 async function execute() {
