@@ -77,11 +77,12 @@ for(org of orgs){
     repolists.map((item) => {
         repolist.push(item.name)
     })
+    let total = 0 ;
     for(repos of repolist )
     workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
     console.log(workflowruns,"workflow runs total count")
     workflowruns.map((item) => {
-        workflowrun.map(item.name)
+        workflowrun.map(item)
     })
 }
 
