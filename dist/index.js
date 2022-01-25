@@ -13484,10 +13484,10 @@ let uniqueRepos = [...new Set(repolist)];
 let uniqueUsers = [...new Set(userlist)];
 console.log(uniqueUsers);
 console.log(uniqueRepos);
-console.log(org.length);
 
 
 /////output//////
+console.log(org.length);
 console.log(uniqueUsers.length);
 console.log(uniqueRepos.length);
 console.log(totalworkflowrunscount,"finaloup");
