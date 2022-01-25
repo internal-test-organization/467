@@ -13439,7 +13439,7 @@ orglists.map((item) => {
 let userlist = [];
 let repolist = [];
 let workflowrun  = [];
-let total = 0 ;
+let totalworkflowcount = 0 ;
 for(org of orgs){
     let lRepoList = [];
     console.log(org)
@@ -13459,7 +13459,7 @@ for(org of orgs){
         console.log(repos)
         workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
         console.log(workflowruns,"workflow runs total count")
-        total += workflowruns;
+        totalworkflowcount += workflowruns;
 
         continue;
     }
@@ -13468,13 +13468,14 @@ for(org of orgs){
 
 console.log(userlist,"final user list")
 console.log(repolist,"final repo list")
-console.log(workflowrun,"final workflow count array")
+console.log(totalworkflowcount,"final workflow count array")
 let uniqueRepos = [...new Set(repolist)];
 let uniqueUsers = [...new Set(userlist)];
 console.log(uniqueUsers);
 console.log(uniqueUsers.length);
 console.log(uniqueRepos);
 console.log(uniqueRepos.length);
+console.log(totalworkflowcount,"final workflow count array")
 }
 
 async function execute() {
