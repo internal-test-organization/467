@@ -88,7 +88,7 @@ for(org of orgs){
         console.log(workflowruns,"workflow runs total count")
         totalworkflowrunscount += workflowruns;
 
-        workflowruns = await orgActivity1.getWorkflows(org,repos);
+        workflows = await orgActivity1.getWorkflows(org,repos);
         console.log(workflows,"workflow runs total count")
         totalworkflowscount += workflows;
 
@@ -105,6 +105,9 @@ let uniqueUsers = [...new Set(userlist)];
 console.log(uniqueUsers);
 console.log(uniqueRepos);
 console.log(org.length);
+
+
+/////output//////
 console.log(uniqueUsers.length);
 console.log(uniqueRepos.length);
 console.log(totalworkflowrunscount,"finaloup");
