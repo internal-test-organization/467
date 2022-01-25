@@ -107,10 +107,10 @@ console.log(uniqueRepos);
 
 
 /////output//////
-console.log(org.length);
-console.log(uniqueUsers.length);
-console.log(uniqueRepos.length);
-console.log(totalworkflowrunscount,"finaloup");
+console.log(orgs.length,"Organizations");
+console.log(uniqueUsers.length,"user count");
+console.log(uniqueRepos.length,"repo count");
+console.log(totalworkflowrunscount,"count");
 console.log(totalworkflowscount,"final workflow count array");
 }
 
