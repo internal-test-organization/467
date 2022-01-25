@@ -63,20 +63,29 @@ orglists.map((item) => {
 })
 
 let userlist = [];
+let repolist = [];
 for(org of orgs){
     console.log(orglists)
-    userlists = await orgActivity1.getOrgMembers(org);
+    userlists = await orgActivity1.getOrgMembers(org); //user list
     console.log(userlists)
     userlists.map((item) => {
         userlist.push(item.login)
-        
+    })
+    repolists = await orgActivity1.getOrgRepo(org); //repo list
+    console.log(repolists)
+    repolists.map((item) => {
+        repolist.push(item.name)
     })
 }
 
 console.log(userlist,"final user list")
+console.log(repolist,"final repo list")
+let uniqueRepos = [...new Set(repolist)];
 let uniqueUsers = [...new Set(userlist)];
 console.log(uniqueUsers);
 console.log(uniqueUsers.length);
+console.log(uniqueRepos);
+console.log(uniqueRepos.length);
 }
 
 async function execute() {
