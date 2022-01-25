@@ -64,6 +64,7 @@ orglists.map((item) => {
 
 let userlist = [];
 for(org of orglists){
+    console.log(orglists)
     userlists = await orgActivity1.getOrgMembers(org);
     console.log(userlists)
     userlists.map((item) => {
