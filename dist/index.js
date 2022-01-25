@@ -13435,11 +13435,11 @@ for(org of orgs){
     console.log(userlists)
     userlists.map((item) => {
         userlist.push(item.login)
-        console.log(userlist,"user list")
+        
     })
 }
 
-console.log(userlist)
+console.log(userlist,"final user list")
 }
 
 async function execute() {
