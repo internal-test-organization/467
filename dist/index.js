@@ -13099,7 +13099,7 @@ module.exports = class Organization {
         console.log(`Processing ${workflowruns.length} workflow runs`);
         console.log(workflowruns.total_count);
         console.log(workflowruns)
-        return workflowruns.total_count
+        return workflowruns.length
       });
     }
     getOrgs(org) {
