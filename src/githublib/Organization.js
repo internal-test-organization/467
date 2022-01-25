@@ -92,10 +92,10 @@ module.exports = class Organization {
         console.log(`Processing ${workflowruns.length} workflow runs`);
         return workflowruns.map(workflowrun => {
           return {
-            name: workflowrun.name,
+            name: workflowrun.total_count,
           };
         });
-        });
+      });
     }
     getOrgs(org) {
       return this.octokit.paginate("GET /orgs/:org",
