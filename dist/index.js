@@ -13429,7 +13429,7 @@ orglists.map((item) => {
 })
 
 let userlist = [];
-for(org of orglists){
+for(org of orgs){
     console.log(orglists)
     userlists = await orgActivity1.getOrgMembers(org);
     console.log(userlists)
