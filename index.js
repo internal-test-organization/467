@@ -94,7 +94,7 @@ for(org of orgs){
 
     
     }
-    console.log(total)
+    console.log(totalworkflowscount)
 }
 
 console.log(userlist,"final user list")
@@ -111,7 +111,7 @@ console.log(org.length);
 console.log(uniqueUsers.length);
 console.log(uniqueRepos.length);
 console.log(totalworkflowrunscount,"finaloup");
-console.log(totalworkflowcount,"final workflow count array");
+console.log(totalworkflowscount,"final workflow count array");
 }
 
 async function execute() {
