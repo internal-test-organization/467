@@ -13028,7 +13028,7 @@ module.exports = class Organization {
       return this.octokit.paginate("GET /user/orgs")
       .then(userorgs => {
         console.log(`Processing ${userorgs.length} orglists`);
-        return userorgs.map(secret => { return {
+        return userorgs.map(userorg => { return {
           name: userorg.login,
         }});
       })
