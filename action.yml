@@ -1,0 +1,22 @@
+name: metrics
+description: genertate metrics
+author: moses
+
+inputs: 
+  token: 
+    description:
+    required:
+
+  outputDir:
+      description: output directory
+      required: true
+      default: ${{ github.workspace }}
+  
+  octokit_max_retries:
+    description: maximum number if retries 
+    required: true
+    default: 15
+  
+runs:
+  using: node12
+  main: dist/index.js
