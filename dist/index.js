@@ -13099,7 +13099,7 @@ module.exports = class Organization {
         console.log(`Processing ${workflowruns.length} workflow runs`);
         return workflowruns.map(workflowrun => {
           return {
-            name: workflowruns.length,
+            name: workflowrun.total_count,
           };
         });
       });
