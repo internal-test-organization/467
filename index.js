@@ -74,6 +74,8 @@ for(org of orgs){
 }
 
 console.log(userlist,"final user list")
+let uniqueUsers = [...new Set(userlist)];
+console.log(uniqueUsers);
 }
 
 async function execute() {
