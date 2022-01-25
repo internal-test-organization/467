@@ -99,7 +99,7 @@ for(org of orgs){
 
 console.log(userlist,"final user list")
 console.log(repolist,"final repo list")
-console.log(totalworkflowcount,"final workflow count array")
+console.log(totalworkflowscount,"final workflow count array")
 let uniqueRepos = [...new Set(repolist)];
 let uniqueUsers = [...new Set(userlist)];
 console.log(uniqueUsers);
