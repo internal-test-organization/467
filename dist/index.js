@@ -13379,7 +13379,7 @@ const fs = __nccwpck_require__(7147)
 async function run() {
   const token = core.getInput('token')
     , outputDir = core.getInput('outputDir')
-    , organizationinp = core.getInput('organization')
+    //, organizationinp = core.getInput('organization')
     , maxRetries = core.getInput('octokit_max_retries')
   ;
 console.log(organizationinp)
@@ -13402,19 +13402,19 @@ const octokit = githubClient.create(token, maxRetries)
 
 
 //***since and fromdate and todate */
-let fromDate;
-  if (since) {
-    let validate_since = sinceregex.test(since);
-    if((!validate_since)) {
-      throw new Error('Provide a valid since - It accept only following format - YYYY-MM-DDTHH:mm:ss');
-    }
-    console.log(`Since Date has been specified, using that instead of active_days`)
-    fromDate = dateUtil.getFromDate(since);
-    todate = dateUtil.getFromDate(since)
-  } else {
-    fromDate = dateUtil.convertDaysToDate(days);
-    todate = dateUtil.getFromDate(days)
-  }
+// let fromDate;
+//   if (since) {
+//     let validate_since = sinceregex.test(since);
+//     if((!validate_since)) {
+//       throw new Error('Provide a valid since - It accept only following format - YYYY-MM-DDTHH:mm:ss');
+//     }
+//     console.log(`Since Date has been specified, using that instead of active_days`)
+//     fromDate = dateUtil.getFromDate(since);
+//     todate = dateUtil.getFromDate(since)
+//   } else {
+//     fromDate = dateUtil.convertDaysToDate(days);
+//     todate = dateUtil.getFromDate(days)
+//   }
 
 
 
@@ -13439,22 +13439,22 @@ for (org of orgs){
 }
 
 
-saveIntermediateData(outputDir, finaloutput);
+// saveIntermediateData(outputDir, finaloutput);
 
 
-function saveIntermediateData(directory, data) {
-  try {
-    const file = path.join(directory, 'org-overriden-secret.json');
-    fs.writeFileSync(file, JSON.stringify(data));
-    core.setOutput('report_json', file);
-  } catch (err) {
-    console.error(`Failed to save intermediate data: ${err}`);
-  }
-}
+// function saveIntermediateData(directory, data) {
+//   try {
+//     const file = path.join(directory, 'org-overriden-secret.json');
+//     fs.writeFileSync(file, JSON.stringify(data));
+//     core.setOutput('report_json', file);
+//   } catch (err) {
+//     console.error(`Failed to save intermediate data: ${err}`);
+//   }
+// }
 
-core.setOutput('repos',orgrepos);
-core.setOutput('secret',secrets);
-core.setOutput('report',finaloutput);
+// core.setOutput('repos',orgrepos);
+// core.setOutput('secret',secrets);
+// core.setOutput('report',finaloutput);
 }
 
 async function execute() {
