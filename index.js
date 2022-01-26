@@ -77,10 +77,10 @@ for(org of orgs){
     // })
     repolists = await orgActivity1.getOrgRepo(org); //repo list
     console.log(repolists)
-    // repolists.map((item) => {
-    //     repolist.push(item.name)
-    //     lRepoList.push(item.name)
-    // })
+     repolists.map((item) => {
+         repolist.push(item.name)
+         lRepoList.push(item.name)
+     })
     
     for(repos of lRepoList ){
         console.log(repos)
