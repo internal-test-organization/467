@@ -93,8 +93,8 @@ module.exports = class Organization {
         //return workflows.length
         return workflows.map(workflow => {
           return {
-            name: workflows.id,
-            created_date : workflows.created_at
+            name: workflow.id,
+            created_date : workflow.created_at
           };
         });
       });
