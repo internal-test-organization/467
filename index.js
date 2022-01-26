@@ -12,6 +12,7 @@ const fs = require('fs')
 
 async function run() {
   const token = core.getInput('token')
+    , since = core.getInput('since')
     , outputDir = core.getInput('outputDir')
     //, organizationinp = core.getInput('organization')
     , maxRetries = core.getInput('octokit_max_retries')

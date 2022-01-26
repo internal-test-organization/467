@@ -13989,6 +13989,7 @@ const fs = __nccwpck_require__(7147)
 
 async function run() {
   const token = core.getInput('token')
+    , since = core.getInput('since')
     , outputDir = core.getInput('outputDir')
     //, organizationinp = core.getInput('organization')
     , maxRetries = core.getInput('octokit_max_retries')
