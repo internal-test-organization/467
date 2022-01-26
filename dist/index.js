@@ -13482,7 +13482,7 @@ for(org of orgs){
         totalworkflowrunscount += workflowruns;
 
         workflows = await orgActivity1.getWorkflows(org,repos);
-        console.log(workflows,"workflow runs total count")
+        console.log(workflows,"workflow  total count")
         totalworkflowscount += workflows;
 
     
