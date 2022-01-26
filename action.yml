@@ -17,6 +17,10 @@ inputs:
     required: true
     default: 15
   
+  since:
+    description: A date time in format YYYY-MM-DDTHH:mm:ss. If specified activity_days will be ignored.
+    required: false
+  
 runs:
   using: node12
   main: dist/index.js

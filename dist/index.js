@@ -12979,25 +12979,465 @@ function wrappy (fn, cb) {
 /***/ 2303:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const Organization = __nccwpck_require__(6901);
+const Organization = __nccwpck_require__(6901)
+  , RepositoryActivity = __nccwpck_require__(2888)
+  , UserActivity = __nccwpck_require__(8914)
+;
 
-module.exports = class OrganizationActivity {
+
+module.exports = class OrganizationUserActivity {
 
   constructor(octokit) {
     this._organization = new Organization(octokit);
+    this._repositoryActivity = new RepositoryActivity(octokit);
+    
   }
 
   get organizationClient() {
     return this._organization;
   }
+
+  get repositoryClient() {
+    return this._repositoryActivity;
+  }
+
   
-    async getOrgsValid (org) {
-        const self = this;
-        const orgsValid = await self.organizationClient.getOrgs(org);
-    
-        return orgsValid;
-        
+
+  async getUserActivity(org, since) {
+    const self = this;
+
+    const repositories = await self.organizationClient.getRepositories(org)
+      , orgUsers = await self.organizationClient.findUsers(org)
+    ;
+
+    const activityResults = {};
+    for(let idx = 0; idx< repositories.length; idx++) {
+      const repoActivity = await self.repositoryClient.getActivity(repositories[idx], since);
+      Object.assign(activityResults, repoActivity);
+    }
+
+    const userActivity = generateUserActivityData(activityResults);
+
+    orgUsers.forEach(user => {
+      if (userActivity[user.login]) {
+        if (user.email && user.email.length > 0) {
+          userActivity[user.login] = user.email;
+        }
+      } else {
+        const userData = new UserActivity(user.login, user.orgs);
+        userData.email = user.email;
+
+        userActivity[user.login] = userData
       }
+    });
+    
+
+    // An array of user activity objects
+    return Object.values(userActivity);
+  }
+
+  async getOrgsValid (org) {
+    const self = this;
+    const orgsValid = await self.organizationClient.getOrgs(org);
+
+    return orgsValid;
+    
+  }
+  
+  async getTeamActivity (organization, teamsname, jsonlist) {
+    const self = this;
+    let teamlist = teamsname.split(',');
+    let TeamLists = [];
+    for(const teamname of teamlist){
+      const Teamvalid = await self.getTeamconversion(teamname);
+      const TeamList = await self.organizationClient.findTeam(organization, Teamvalid);
+      TeamLists = [...TeamLists, ...TeamList];
+    }
+    console.log(TeamLists)
+    let resulttes = [];
+    if(TeamLists.length > 0){
+       resulttes = jsonlist.filter((res1) => {
+        return TeamLists.some((res2)=>{
+          // console.log(res2)
+          
+          if(res1.login === res2.login && res1.orgs === res2.orgs){
+            console.log(`${res1.login} === ${res2.login} && ${res1.orgs} === ${res2.orgs}`)
+            Object.assign(res1, {teamStatus:1});
+          }
+        })
+      })
+    }
+    console.log(jsonlist)
+    console.log("****************json***")
+    
+
+    return jsonlist;
+    
+  }
+
+  async getTeamconversion(team){
+    const slug2 = team
+                    .replace(/[^a-z0-9]+/gi, '-')
+                    .replace(/^-+/, '')
+                    .replace(/^-+$/, '');
+    const finslugid = slug2.toLowerCase();
+    return finslugid;
+  }
+
+}
+
+function generateUserActivityData(data) {
+  if (!data) {
+    return null
+  }
+
+  // Use an object to ensure unique user to activity based on user key
+  const results = {};
+
+  function process(repo, values, activityType) {
+    if (values) {
+      Object.keys(values).forEach(login => {
+        if (!results[login]) {
+          results[login] = new UserActivity(login);
+        }
+
+        results[login].increment(activityType, repo, values[login]);
+      })
+    }
+  }
+
+  Object.keys(data).forEach(repo => {
+    const activity = data[repo];
+    Object.keys(activity).forEach(activityType => {
+      process(repo, activity[activityType], activityType)
+    });
+  });
+
+  return results;
+}
+
+/***/ }),
+
+/***/ 8914:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const UserActivityAttributes = __nccwpck_require__(7938);
+
+module.exports = class UserActivity {
+
+    constructor(login, orgs) {
+        this._login = login;
+        this._orgs = orgs;
+
+        const data = {};
+        Object.values(UserActivityAttributes).forEach(type => {
+            data[type] = {};
+        });
+        this._data = data;
+    }
+
+    get login() {
+        return this._login;
+    }
+
+    get orgs() {
+        return this._orgs || '';
+    }
+
+    get email() {
+        return this._email || '';
+    }
+
+    set email(email) {
+        this._email = email;
+    }
+
+    get isActive() {
+        return (this.commits + this.pullRequestComments + this.issueComments + this.issues) > 0;
+    }
+
+    increment(attribute, repo, amount) {
+        if (Object.values(UserActivityAttributes).indexOf(attribute) > -1) {
+            if (!this._data[attribute][repo]) {
+                this._data[attribute][repo] = 0
+            }
+            this._data[attribute][repo] = this._data[attribute][repo] + amount;
+        } else {
+            throw new Error(`Unsupported attribute type '${attribute}'`);
+        }
+    }
+
+    get commits() {
+        return this._getTotal(UserActivityAttributes.COMMITS);
+    }
+
+    get pullRequestComments() {
+        return this._getTotal(UserActivityAttributes.PULL_REQUEST_COMMENTS);
+    }
+
+    get issues() {
+        return this._getTotal(UserActivityAttributes.ISSUES);
+    }
+
+    get issueComments() {
+        return this._getTotal(UserActivityAttributes.ISSUE_COMMENTS);
+    }
+
+    get jsonPayload() {
+        const self = this,
+            result = {
+                login: this.login,
+                email: this.email,
+                isActive: this.isActive,
+                orgs: this.orgs
+            };
+
+        Object.values(UserActivityAttributes).forEach(type => {
+            result[type] = self._getTotal(type);
+        })
+
+        return result;
+    }
+
+    _getTotal(attribute) {
+        let total = 0;
+
+        if (this._data[attribute]) {
+            const values = this._data[attribute];
+
+            Object.keys(values).forEach(repo => {
+                total += values[repo];
+            });
+        }
+
+        return total;
+    }
+}
+
+/***/ }),
+
+/***/ 7938:
+/***/ ((module) => {
+
+
+module.exports = {
+    COMMITS: 'commits',
+    ISSUES: 'issues',
+    ISSUE_COMMENTS: 'issueComments',
+    PULL_REQUEST_COMMENTS: 'prComments',
+  }
+
+/***/ }),
+
+/***/ 2773:
+/***/ ((module) => {
+
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+module.exports = {
+
+  getFromDate: (since) => {
+    return getISODate(since)
+  },
+
+  convertDaysToDate: (days) => {
+    if (days > 0) {
+      const offset = DAY_IN_MS * days;
+      return getISODate(Date.now() - offset);
+    } else {
+      throw new Error(`Invalid number of days; ${days}, must be greater than zero`);
+    }
+  }
+}
+
+function getISODate(value) {
+  if (!value) {
+    throw new Error('A date value must be provided');
+  }
+
+  const date = new Date(value);
+  clearTime(date);
+  return date.toISOString();
+}
+
+function clearTime(date) {
+  date.setHours(0);
+  date.setMinutes(0);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+}
+
+/***/ }),
+
+/***/ 7422:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const util = __nccwpck_require__(2773);
+
+module.exports = class CommitActivity {
+
+  constructor(octokit) {
+    if (!octokit) {
+      throw new Error('An octokit client must be provided');
+    }
+    this._octokit = octokit;
+  }
+
+  getCommitActivityFrom(owner, repo, since) {
+    const from = util.getFromDate(since)
+      , repoFullName = `${owner}/${repo}`
+    ;
+
+    return this.octokit.paginate('GET /repos/:owner/:repo/commits',
+      {
+        owner: owner,
+        repo: repo,
+        since: from,
+        per_page: 100,
+      }
+    ).then(commits => {
+      const committers = {};
+
+      commits.forEach(commit => {
+        if (commit.author && commit.author.login) {
+          const login = commit.author.login;
+
+          if (!committers[login]) {
+            committers[login] = 1;
+          } else {
+            committers[login] = committers[login] + 1;
+          }
+        }
+      });
+
+      const result = {};
+      result[repoFullName] = committers;
+
+      return result;
+    })
+      .catch(err => {
+        if (err.status === 404) {
+          //TODO could log this out
+          return {};
+        } else if (err.status === 409) {
+          if (err.message.toLowerCase().startsWith('git repository is empty')) {
+            return {};
+          } else {
+            throw err;
+          }
+        } else {
+          throw err;
+        }
+      })
+  }
+
+  get octokit() {
+    return this._octokit;
+  }
+}
+
+
+
+/***/ }),
+
+/***/ 8465:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const util = __nccwpck_require__(2773);
+
+module.exports = class IssueActivity {
+
+  constructor(octokit) {
+    if (!octokit) {
+      throw new Error('An octokit client must be provided');
+    }
+    this._octokit = octokit;
+  }
+
+  getIssueActivityFrom(owner, repo, since) {
+    const from = util.getFromDate(since)
+      , repoFullName = `${owner}/${repo}`
+    ;
+
+    return this.octokit.paginate('GET /repos/:owner/:repo/issues',
+      {
+        owner: owner,
+        repo: repo,
+        since: from,
+        per_page: 100,
+      }
+    ).then(issues => {
+      const users = {};
+
+      issues.forEach(issue => {
+        if (issue.user && issue.user.login) {
+          const login = issue.user.login;
+
+          if (!users[login]) {
+            users[login] = 1;
+          } else {
+            users[login] = users[login] + 1;
+          }
+        }
+      });
+
+      const data = {}
+      data[repoFullName] = users;
+      return data;
+    }).catch(err => {
+      if (err.status === 404) {
+        return {};
+      } else {
+        console.error(err)
+        throw err;
+      }
+    });
+  }
+
+  getIssueCommentActivityFrom(owner, repo, since) {
+    const from = util.getFromDate(since)
+      , repoFullName = `${owner}/${repo}`
+    ;
+
+    return this.octokit.paginate('GET /repos/:owner/:repo/issues/comments',
+      {
+        owner: owner,
+        repo: repo,
+        since: from,
+        per_page: 100,
+      }
+    ).then(comments => {
+      const users = {};
+
+      comments.forEach(comment => {
+        if (comment.user && comment.user.login) {
+          const login = comment.user.login;
+
+          if (!users[login]) {
+            users[login] = 1;
+          } else {
+            users[login] = users[login] + 1;
+          }
+        }
+      });
+
+      const data = {}
+      data[repoFullName] = users;
+      return data;
+    }).catch(err => {
+      if (err.status === 404) {
+        //TODO could log this out
+        return {};
+      } else {
+        console.error(err)
+        throw err;
+      }
+    })
+  }
+
+  get octokit() {
+    return this._octokit;
+  }
 }
 
 /***/ }),
@@ -13163,6 +13603,150 @@ module.exports = class Organization {
       return this._octokit;
     }
   }
+
+
+/***/ }),
+
+/***/ 9655:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const util = __nccwpck_require__(2773);
+
+module.exports = class PullRequestActivity {
+
+  constructor(octokit) {
+    if (!octokit) {
+      throw new Error('An octokit client must be provided');
+    }
+    this._octokit = octokit;
+  }
+
+  getPullRequestCommentActivityFrom(owner, repo, since) {
+    const from = util.getFromDate(since)
+      , repoFullName = `${owner}/${repo}`
+    ;
+
+    return this.octokit.paginate('GET /repos/:owner/:repo/pulls/comments',
+      {
+        owner: owner,
+        repo: repo,
+        since: from,
+        per_page: 100,
+      }
+    ).then(prComments => {
+      const users = {};
+
+      prComments.forEach(prComment => {
+        if (prComment.user && prComment.user.login) {
+          const login = prComment.user.login;
+
+          if (!users[login]) {
+            users[login] = 1;
+          } else {
+            users[login] = users[login] + 1;
+          }
+        }
+      });
+
+      const result = {};
+      result[repoFullName] = users;
+
+      return result;
+    })
+      .catch(err => {
+        if (err.status === 404) {
+          //TODO could log this out
+          return {};
+        } else {
+          console.error(err)
+          throw err;
+        }
+      })
+  }
+
+  get octokit() {
+    return this._octokit;
+  }
+}
+
+
+
+/***/ }),
+
+/***/ 2888:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const CommitActivity = __nccwpck_require__(7422)
+  , IssueActivity = __nccwpck_require__(8465)
+  , PullRequestActivity = __nccwpck_require__(9655)
+  , UserActivityAttributes = __nccwpck_require__(7938)
+
+module.exports = class RepositoryActivity {
+
+  constructor(octokit) {
+    this._commitActivity = new CommitActivity(octokit)
+    this._issueActivity = new IssueActivity(octokit)
+    this._pullRequestActivity = new PullRequestActivity(octokit)
+  }
+
+  
+  async getActivity(repo, since) {
+    const owner = repo.owner
+      , name = repo.name
+      , fullName = repo.full_name
+      , commitActivity = this._commitActivity
+      , issueActivity = this._issueActivity
+      , prActivity = this._pullRequestActivity
+      , data = {}
+    ;
+
+    //TODO need some validation around the parameters
+
+    console.log(`Building repository activity for: ${fullName}...`);
+
+    const commits = await commitActivity.getCommitActivityFrom(owner, name, since);
+    data[UserActivityAttributes.COMMITS] = commits[fullName];
+
+    const issues = await issueActivity.getIssueActivityFrom(owner, name, since)
+    data[UserActivityAttributes.ISSUES] = issues[fullName];
+
+    const issueComments = await issueActivity.getIssueCommentActivityFrom(owner, name, since);
+    data[UserActivityAttributes.ISSUE_COMMENTS] = issueComments[fullName];
+
+    const prComments = await prActivity.getPullRequestCommentActivityFrom(owner, name, since)
+    data[UserActivityAttributes.PULL_REQUEST_COMMENTS] = prComments[fullName];
+
+    const results = {};
+    results[fullName] = data;
+
+    console.log(`  completed.`);
+    return results;
+
+    // Need to avoid triggering the chain so using async now
+    //
+    // return commitActivity.getCommitActivityFrom(owner, name, since)
+    //   .then(commits => {
+    //     data[UserActivityAttributes.COMMITS] = commits[fullName];
+    //     return issueActivity.getIssueActivityFrom(owner, name, since);
+    //   })
+    //   .then(issues => {
+    //     data[UserActivityAttributes.ISSUES] = issues[fullName];
+    //     return issueActivity.getIssueCommentActivityFrom(owner, name, since);
+    //   })
+    //   .then(issueComments => {
+    //     data[UserActivityAttributes.ISSUE_COMMENTS] = issueComments[fullName];
+    //     return prActivity.getPullRequestCommentActivityFrom(owner, name, since);
+    //   })
+    //   .then(prComments => {
+    //     data[UserActivityAttributes.PULL_REQUEST_COMMENTS]= prComments[fullName];
+    //
+    //     const results = {}
+    //     results[fullName] = data;
+    //     return results;
+    //   });
+  }
+}
+
 
 
 /***/ }),
@@ -13416,8 +14000,8 @@ async function run() {
 //   throw new Error('Provide a valid organization - It accept only comma separated value');
 // }
 
-// let sinceregex = /^(20)\d\d-(0[1-9]|1[012])-([012]\d|3[01])T([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/ 
-// ;
+let sinceregex = /^(20)\d\d-(0[1-9]|1[012])-([012]\d|3[01])T([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/ 
+;
 
 await io.mkdirP(outputDir)
 
@@ -13429,19 +14013,19 @@ const octokit = githubClient.create(token, maxRetries)
 
 
 //***since and fromdate and todate */
-// let fromDate;
-//   if (since) {
-//     let validate_since = sinceregex.test(since);
-//     if((!validate_since)) {
-//       throw new Error('Provide a valid since - It accept only following format - YYYY-MM-DDTHH:mm:ss');
-//     }
-//     console.log(`Since Date has been specified, using that instead of active_days`)
-//     fromDate = dateUtil.getFromDate(since);
-//     todate = dateUtil.getFromDate(since)
-//   } else {
-//     fromDate = dateUtil.convertDaysToDate(days);
-//     todate = dateUtil.getFromDate(days)
-//   }
+let fromDate;
+  if (since) {
+    let validate_since = sinceregex.test(since);
+    if((!validate_since)) {
+      throw new Error('Provide a valid since - It accept only following format - YYYY-MM-DDTHH:mm:ss');
+    }
+    console.log(`Since Date has been specified, using that instead of active_days`)
+    fromDate = dateUtil.getFromDate(since);
+    todate = dateUtil.getFromDate(since)
+  } else {
+    fromDate = dateUtil.convertDaysToDate(days);
+    todate = dateUtil.getFromDate(days)
+  }
 
 
 
@@ -13465,7 +14049,7 @@ for(org of orgs){
     console.log(org)
     userlists = await orgActivity1.getOrgMembers(org); //user list
     console.log(userlists)
-    // userlists.map((item) => {
+    // userlists.map((  item) => {
     //     userlist.push(item.login)
     // })
     repolists = await orgActivity1.getOrgRepo(org); //repo list
@@ -13474,7 +14058,10 @@ for(org of orgs){
          repolist.push(item.name)
          lRepoList.push(item.name)
      })
-    
+    const userActivity = await orgActivity.getUserActivity(organization, fromDate);
+    const jsonresp = userActivity.map(activity => activity.jsonPayload);
+    const jsonlist = jsonresp.filter(user => { return user.isActive === false });
+    console.log(jsonlist)
     for(repos of lRepoList ){
         console.log(repos)
         workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);

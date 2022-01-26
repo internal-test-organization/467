@@ -23,8 +23,8 @@ async function run() {
 //   throw new Error('Provide a valid organization - It accept only comma separated value');
 // }
 
-// let sinceregex = /^(20)\d\d-(0[1-9]|1[012])-([012]\d|3[01])T([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/ 
-// ;
+let sinceregex = /^(20)\d\d-(0[1-9]|1[012])-([012]\d|3[01])T([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/ 
+;
 
 await io.mkdirP(outputDir)
 
@@ -36,19 +36,19 @@ const octokit = githubClient.create(token, maxRetries)
 
 
 //***since and fromdate and todate */
-// let fromDate;
-//   if (since) {
-//     let validate_since = sinceregex.test(since);
-//     if((!validate_since)) {
-//       throw new Error('Provide a valid since - It accept only following format - YYYY-MM-DDTHH:mm:ss');
-//     }
-//     console.log(`Since Date has been specified, using that instead of active_days`)
-//     fromDate = dateUtil.getFromDate(since);
-//     todate = dateUtil.getFromDate(since)
-//   } else {
-//     fromDate = dateUtil.convertDaysToDate(days);
-//     todate = dateUtil.getFromDate(days)
-//   }
+let fromDate;
+  if (since) {
+    let validate_since = sinceregex.test(since);
+    if((!validate_since)) {
+      throw new Error('Provide a valid since - It accept only following format - YYYY-MM-DDTHH:mm:ss');
+    }
+    console.log(`Since Date has been specified, using that instead of active_days`)
+    fromDate = dateUtil.getFromDate(since);
+    todate = dateUtil.getFromDate(since)
+  } else {
+    fromDate = dateUtil.convertDaysToDate(days);
+    todate = dateUtil.getFromDate(days)
+  }
 
 
 
@@ -72,7 +72,7 @@ for(org of orgs){
     console.log(org)
     userlists = await orgActivity1.getOrgMembers(org); //user list
     console.log(userlists)
-    // userlists.map((item) => {
+    // userlists.map((  item) => {
     //     userlist.push(item.login)
     // })
     repolists = await orgActivity1.getOrgRepo(org); //repo list
@@ -81,7 +81,10 @@ for(org of orgs){
          repolist.push(item.name)
          lRepoList.push(item.name)
      })
-    
+    const userActivity = await orgActivity.getUserActivity(organization, fromDate);
+    const jsonresp = userActivity.map(activity => activity.jsonPayload);
+    const jsonlist = jsonresp.filter(user => { return user.isActive === false });
+    console.log(jsonlist)
     for(repos of lRepoList ){
         console.log(repos)
         workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
