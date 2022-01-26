@@ -14,6 +14,7 @@ const fs = require('fs')
 async function run() {
   const token = core.getInput('token')
     , since = core.getInput('since')
+    , days = core.getInput('activity_days')
     , outputDir = core.getInput('outputDir')
     //, organizationinp = core.getInput('organization')
     , maxRetries = core.getInput('octokit_max_retries')
@@ -35,7 +36,9 @@ const octokit = githubClient.create(token, maxRetries)
   , orgActivity1 = new Organization(octokit)
 ;
 
-
+if((!Number(days)) || (days < 0)) {
+    throw new Error('Provide a valid activity_days - It accept only Positive Number');
+  }
 
 //***since and fromdate and todate */
 let fromDate;
@@ -46,10 +49,10 @@ let fromDate;
     }
     console.log(`Since Date has been specified, using that instead of active_days`)
     fromDate = dateUtil.getFromDate(since);
-    todate = dateUtil.getFromDate(since)
+    
   } else {
     fromDate = dateUtil.convertDaysToDate(days);
-    todate = dateUtil.getFromDate(days)
+    
   }
 
 
