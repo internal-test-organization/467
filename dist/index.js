@@ -13465,15 +13465,15 @@ for(org of orgs){
     console.log(org)
     userlists = await orgActivity1.getOrgMembers(org); //user list
     console.log(userlists)
-    userlists.map((item) => {
-        userlist.push(item.login)
-    })
+    // userlists.map((item) => {
+    //     userlist.push(item.login)
+    // })
     repolists = await orgActivity1.getOrgRepo(org); //repo list
     console.log(repolists)
-    repolists.map((item) => {
-        repolist.push(item.name)
-        lRepoList.push(item.name)
-    })
+    // repolists.map((item) => {
+    //     repolist.push(item.name)
+    //     lRepoList.push(item.name)
+    // })
     
     for(repos of lRepoList ){
         console.log(repos)
