@@ -13096,7 +13096,7 @@ module.exports = class Organization {
     getWorkflows(org,reponame){
       return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/workflows', {owner: org,repo: reponame,per_page: 100})
       .then(workflows => {
-        console.log(`Processing ${workflows.length} workflow runs`);
+        console.log(`Processing ${workflows.length} workflows`);
         //return workflows.length
         return workflows.map(workflow => {
           return {
