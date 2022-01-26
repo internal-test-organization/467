@@ -74,13 +74,14 @@ module.exports = class Organization {
       });
     }
 
-    getOrgRepo(org,secret) {
+    getOrgRepo(org) {
       return this.octokit.paginate('GET /orgs/{org}/repos', {org: org, per_page: 100})
       .then(orgsecrepos => {
         console.log(`Processing ${orgsecrepos.length} repos contributores`);
         return orgsecrepos.map(orgsecrepo => {
           return {
             name: orgsecrepo.name,
+            created_date : orgsecrepo.created_at
           };
         });
       });
@@ -89,14 +90,26 @@ module.exports = class Organization {
       return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/workflows', {owner: org,repo: reponame,per_page: 100})
       .then(workflows => {
         console.log(`Processing ${workflows.length} workflow runs`);
-        return workflows.length
+        //return workflows.length
+        return workflows.map(workflow => {
+          return {
+            name: workflows.id,
+            created_date : workflows.created_at
+          };
+        });
       });
     }
     getWorkFlowRuns(org, reponame) {
       return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/runs', {owner: org,repo: reponame,per_page: 100})
       .then(workflowruns => {
         console.log(`Processing ${workflowruns.length} workflow runs`);
-        return workflowruns.length
+        //return workflowruns.length
+        return workflowruns.map(workflowrun => {
+          return {
+            name: workflowrun.id,
+            created_date : workflowrun.created_at
+          };
+        });
       });
     }
     getOrgs(org) {

@@ -97,21 +97,21 @@ for(org of orgs){
     console.log(totalworkflowscount)
 }
 
-console.log(userlist,"final user list")
-console.log(repolist,"final repo list")
-console.log(totalworkflowscount,"final workflow count array")
-let uniqueRepos = [...new Set(repolist)];
-let uniqueUsers = [...new Set(userlist)];
-console.log(uniqueUsers);
-console.log(uniqueRepos);
+// console.log(userlist,"final user list")
+// console.log(repolist,"final repo list")
+// console.log(totalworkflowscount,"final workflow count array")
+// let uniqueRepos = [...new Set(repolist)];
+// let uniqueUsers = [...new Set(userlist)];
+// console.log(uniqueUsers);
+// console.log(uniqueRepos);
 
 
-/////output//////
-console.log(orgs.length,"Organizations");
-console.log(uniqueUsers.length,"user count");
-console.log(uniqueRepos.length,"repo count");
-console.log(totalworkflowrunscount,"count");
-console.log(totalworkflowscount,"final workflow count array");
+// /////output//////
+// console.log(orgs.length,"Organizations");
+// console.log(uniqueUsers.length,"user count");
+// console.log(uniqueRepos.length,"repo count");
+// console.log(totalworkflowrunscount,"count");
+// console.log(totalworkflowscount,"final workflow count array");
 }
 
 async function execute() {
