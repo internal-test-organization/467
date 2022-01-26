@@ -14063,7 +14063,7 @@ for(org of orgs){
          repolist.push(item.name)
          lRepoList.push(item.name)
      })
-    const userActivity = await orgActivity.getUserActivity(organization, fromDate);
+    const userActivity = await orgActivity.getUserActivity(org, fromDate);
     const jsonresp = userActivity.map(activity => activity.jsonPayload);
     const jsonlist = jsonresp.filter(user => { return user.isActive === false });
     console.log(jsonlist)
