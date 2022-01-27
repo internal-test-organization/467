@@ -89,7 +89,7 @@ module.exports = class Organization {
     getOrgRepositories(org) {
       return this.octokit.paginate('GET /orgs/{org}/repos', {org: org, per_page: 100})
       .then(orgrepos => {
-        console.log(`Processing ${orgrepos.length} repos contributores`);
+        console.log(`Processing ${orgrepos.length} repos `);
         return orgrepos.map(orgrepo => {
           return {
             name: orgrepo.name,

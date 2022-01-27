@@ -50,7 +50,7 @@ async function run() {
             userlist.push(item.login)
         })
         acrepolists = await orgActivity1.getOrgRepo(org); //repo list
-        console.log(repolists)
+        console.log(acrepolists)
          acrepolists.map((item) => {
              acrepolist.push(item.name,item.created_date)
              aclRepoList.push(item.name)
@@ -199,7 +199,7 @@ async function run() {
     let totalworkflowscount = 0 ;
     let totalworkflowrunscount = 0;
     
-    let repolists = [];
+    
     for(org of orgs){
         let lRepoList = [];
         console.log(org)

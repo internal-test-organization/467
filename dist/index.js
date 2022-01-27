@@ -13536,7 +13536,7 @@ module.exports = class Organization {
     getOrgRepositories(org) {
       return this.octokit.paginate('GET /orgs/{org}/repos', {org: org, per_page: 100})
       .then(orgrepos => {
-        console.log(`Processing ${orgrepos.length} repos contributores`);
+        console.log(`Processing ${orgrepos.length} repos `);
         return orgrepos.map(orgrepo => {
           return {
             name: orgrepo.name,
@@ -14082,7 +14082,7 @@ async function run() {
             userlist.push(item.login)
         })
         acrepolists = await orgActivity1.getOrgRepo(org); //repo list
-        console.log(repolists)
+        console.log(acrepolists)
          acrepolists.map((item) => {
              acrepolist.push(item.name,item.created_date)
              aclRepoList.push(item.name)
@@ -14231,7 +14231,7 @@ async function run() {
     let totalworkflowscount = 0 ;
     let totalworkflowrunscount = 0;
     
-    let repolists = [];
+    
     for(org of orgs){
         let lRepoList = [];
         console.log(org)
