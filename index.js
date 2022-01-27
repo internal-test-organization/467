@@ -126,7 +126,7 @@ let uniqueUsers = [...new Set(userlist)];
 
 let finaloutput = [];
 // /////output//////
-finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": activeuser.length,"total_repos":repolists.length,"total_workflow_runs":totalworkflowrunscount ,"total_workflows":totalworkflowscount})
+finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": activeuser.length,"total_repos":repolist.length,"total_workflow_runs":totalworkflowrunscount ,"total_workflows":totalworkflowscount})
 finaloutputresult = JSON.stringify(finaloutput)
 console.log(orgs.length,"Organizations");
 console.log(uniqueUsers.length,"user count");
