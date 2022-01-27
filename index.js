@@ -72,6 +72,7 @@ let repolist = [];
 let workflowrun  = [];
 let totalworkflowscount = 0 ;
 let totalworkflowrunscount = 0;
+let activeuser = [];
 for(org of orgs){
     let lRepoList = [];
     console.log(org)
@@ -80,6 +81,7 @@ for(org of orgs){
     userlists.map((  item) => {
         userlist.push(item.login)
     })
+    
     for(user of userlist){
         userevents = await orgActivity1.getUserEvents(user);
         console.log(userevents)
