@@ -77,79 +77,79 @@ async function run() {
         
         
     } 
-    console.log(acworkflowrun,"adhoc workflow")
+    console.log(acworkflowrun,"adhoc workflow runs")
     console.log(acworkflow,"adhoc workflows")
     console.log(acrepolist,"adhoc repolist")
     ///*******filter using dates */
-    // const filteredrepos = acrepolist?.filter(function(data){
-    //         const releaseYear = new Date(data.releaseDate).getFullYear();
-    //         return (
-    //             releaseYear >= new Date(FromDate).getFullYear() &&
-    //             releaseYear <= new Date(toDate).getFullYear()
-    //         );
-    // })  
-    //     filteredrepos = acrepolist?.filter(function(data){
-    //         const releaseMonth = new Date(data.releaseMonth).getMonth();
-    //         return (
-    //             releaseMonth >= new Date(FromDate).getMonth() &&
-    //             releaseMonth <= new Date(toDate).getMonth()
-    //         );
-    // })
-    //     filteredrepos = acrepolist?.filter(function(data){
-    //         const releaseDate = new Date(data.releaseDate).getDate();
-    //         return (
-    //             releaseDate >= new Date(FromDate).getDate() &&
-    //             releaseDate <= new Date(toDate).getDate()
-    //         );
-    // })
+    const filteredrepos = acrepolist?.filter(function(data){
+            const releaseYear = new Date(data.releaseDate).getFullYear();
+            return (
+                releaseYear >= new Date(FromDate).getFullYear() &&
+                releaseYear <= new Date(toDate).getFullYear()
+            );
+    })  
+        filteredrepos = acrepolist?.filter(function(data){
+            const releaseMonth = new Date(data.releaseMonth).getMonth();
+            return (
+                releaseMonth >= new Date(FromDate).getMonth() &&
+                releaseMonth <= new Date(toDate).getMonth()
+            );
+    })
+        filteredrepos = acrepolist?.filter(function(data){
+            const releaseDate = new Date(data.releaseDate).getDate();
+            return (
+                releaseDate >= new Date(FromDate).getDate() &&
+                releaseDate <= new Date(toDate).getDate()
+            );
+    })
     // //*****workflowrun */
-    // const filteredwfruns = acworkflowruns?.filter(function(data){
-    //     const releaseYear = new Date(data.releaseDate).getFullYear();
-    //     return (
-    //         releaseYear >= new Date(FromDate).getFullYear() &&
-    //         releaseYear <= new Date(toDate).getFullYear()
-    //     );
-    // })
-    // filteredwfruns = acworkflowruns?.filter(function(data){
-    //     const releaseMonth = new Date(data.releaseMonth).getMonth();
-    //     return (
-    //         releaseMonth >= new Date(FromDate).getMonth() &&
-    //         releaseMonth <= new Date(toDate).getMonth()
-    //     );
-    // })
-    // filteredwfruns = acworkflowruns?.filter(function(data){
-    //     const releaseDate = new Date(data.releaseDate).getDate();
-    //     return (
-    //         releaseDate >= new Date(FromDate).getDate() &&
-    //         releaseDate <= new Date(toDate).getDate()
-    //     );
-    // })
+    const filteredwfruns = acworkflowruns?.filter(function(data){
+        const releaseYear = new Date(data.releaseDate).getFullYear();
+        return (
+            releaseYear >= new Date(FromDate).getFullYear() &&
+            releaseYear <= new Date(toDate).getFullYear()
+        );
+    })
+    filteredwfruns = acworkflowruns?.filter(function(data){
+        const releaseMonth = new Date(data.releaseMonth).getMonth();
+        return (
+            releaseMonth >= new Date(FromDate).getMonth() &&
+            releaseMonth <= new Date(toDate).getMonth()
+        );
+    })
+    filteredwfruns = acworkflowruns?.filter(function(data){
+        const releaseDate = new Date(data.releaseDate).getDate();
+        return (
+            releaseDate >= new Date(FromDate).getDate() &&
+            releaseDate <= new Date(toDate).getDate()
+        );
+    })
     // //***********workflows */
-    // const filteredworkflows = acworkflows?.filter(function(data){
-    //     const releaseYear = new Date(data.releaseDate).getFullYear();
-    //     return (
-    //         releaseYear >= new Date(FromDate).getFullYear() &&
-    //         releaseYear <= new Date(toDate).getFullYear()
-    //     );
-    // })
-    // filteredworkflows = acworkflows?.filter(function(data){
-    //     const releaseMonth = new Date(data.releaseMonth).getMonth();
-    //     return (
-    //         releaseMonth >= new Date(FromDate).getMonth() &&
-    //         releaseMonth <= new Date(toDate).getMonth()
-    //     );
-    // })
-    // filteredworkflows = acworkflows?.filter(function(data){
-    //     const releaseDate = new Date(data.releaseDate).getDate();
-    //     return (
-    //         releaseDate >= new Date(FromDate).getDate() &&
-    //         releaseDate <= new Date(toDate).getDate()
-    //     );
-    // })
+    const filteredworkflows = acworkflows?.filter(function(data){
+        const releaseYear = new Date(data.releaseDate).getFullYear();
+        return (
+            releaseYear >= new Date(FromDate).getFullYear() &&
+            releaseYear <= new Date(toDate).getFullYear()
+        );
+    })
+    filteredworkflows = acworkflows?.filter(function(data){
+        const releaseMonth = new Date(data.releaseMonth).getMonth();
+        return (
+            releaseMonth >= new Date(FromDate).getMonth() &&
+            releaseMonth <= new Date(toDate).getMonth()
+        );
+    })
+    filteredworkflows = acworkflows?.filter(function(data){
+        const releaseDate = new Date(data.releaseDate).getDate();
+        return (
+            releaseDate >= new Date(FromDate).getDate() &&
+            releaseDate <= new Date(toDate).getDate()
+        );
+    })
 
-    // console.log(filteredrepos,"filtered repos with date month and year")
-    // console.log(filteredwfruns,"filtered workflowruns with date month and year")
-    // console.log(filteredworkflows,"filtered workflows with date month and year")
+    console.log(filteredrepos,"filtered repos with date month and year")
+    console.log(filteredwfruns,"filtered workflowruns with date month and year")
+    console.log(filteredworkflows,"filtered workflows with date month and year")
 
     ///*******filter using dates */
 
