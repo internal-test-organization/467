@@ -14076,13 +14076,6 @@ for(org of orgs){
         userlist.push(item.login)
     })
     
-    for(user of userlist){
-        userevents = await orgActivity1.getUserEvents(user);
-        console.log(userevents)
-        if(userevents > 0){
-            activeuser.push(user)
-        }
-    }
 
     repolists = await orgActivity1.getOrgRepo(org); //repo list
     console.log(repolists)
@@ -14115,6 +14108,13 @@ for(org of orgs){
 // console.log(totalworkflowscount,"final workflow count array")
 //let uniqueRepos = [...new Set(repolist)];
 let uniqueUsers = [...new Set(userlist)];
+    for(user of uniqueUsers){
+        userevents = await orgActivity1.getUserEvents(user);
+        console.log(userevents)
+        if(userevents > 0){
+            activeuser.push(user)
+        }
+    }
 console.log(uniqueUsers);
 // console.log(uniqueRepos);
 
