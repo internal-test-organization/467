@@ -14231,6 +14231,7 @@ async function run() {
     let totalworkflowscount = 0 ;
     let totalworkflowrunscount = 0;
     
+    let repolists = [];
     for(org of orgs){
         let lRepoList = [];
         console.log(org)
