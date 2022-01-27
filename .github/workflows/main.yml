@@ -41,5 +41,7 @@ jobs:
         uses: ./
         with:
           token: ${{ secrets.OCTODEMO_TEMP_TOKEN }}
-          activity_days: ${{ github.event.inputs.activity_days }}
+          runmethod: ${{github.event.inputs.runmethod}}
+          fromdate: ${{github.event.inputs.fromdate}}
+          todate: ${{github.event.inputs.todate}}
           
