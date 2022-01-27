@@ -119,7 +119,7 @@ for(org of orgs){
 // console.log(userlist,"final user list")
 // console.log(repolist,"final repo list")
 // console.log(totalworkflowscount,"final workflow count array")
-let uniqueRepos = [...new Set(repolist)];
+//let uniqueRepos = [...new Set(repolist)];
 let uniqueUsers = [...new Set(userlist)];
 console.log(uniqueUsers);
 console.log(uniqueRepos);
@@ -130,7 +130,8 @@ finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"ac
 finaloutputresult = JSON.stringify(finaloutput)
 console.log(orgs.length,"Organizations");
 console.log(uniqueUsers.length,"user count");
-console.log(uniqueRepos.length,"repo count");
+console.log(repolist.length,"repo count");
+console.log(activeuser.length,"active user")
 console.log(totalworkflowrunscount,"count");
 console.log(totalworkflowscount,"final workflow count array");
 
