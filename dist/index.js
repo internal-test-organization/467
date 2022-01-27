@@ -14116,24 +14116,24 @@ async function run() {
     ///*******filter using dates */
     
     ///********acrepolist */
-    ed = new Date(fromDate).getTime(),
-    sd = new Date(toDate).getTime(),
+    ed = new Date(fromDate).getDate(),
+    sd = new Date(toDate).getDate(),
     console.log(ed)
     console.log(sd)
-    filteredrepos = acrepolist.filter(d => {var time = new Date(d.released_on).getTime();
+    filteredrepos = acrepolist.filter(d => {var time = new Date(d.released_on).getDate();
                              return (sd <= time && time <= ed);
                             });
     console.log(filteredrepos);
     // //*****workflowrun */
-    ed = new Date(fromDate).getTime(),
-    sd = new Date(toDate).getTime(),
+    ed = new Date(fromDate).getDate(),
+    sd = new Date(toDate).getDate(),
     filteredwfruns = acworkflowrun.filter(d => {var time = new Date(d.released_on).getTime();
                              return (sd <= time && time <= ed);
                             });
     console.log(filteredwfruns);
     // //***********workflows */
-    ed = new Date(fromDate).getTime(),
-    sd = new Date(toDate).getTime(),
+    ed = new Date(fromDate).getDate(),
+    sd = new Date(toDate).getDate(),
     filteredworkflows = acworkflow.filter(d => {var time = new Date(d.released_on).getTime();
                              return (sd <= time && time <= ed);
                             });
