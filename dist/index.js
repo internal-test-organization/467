@@ -14084,7 +14084,7 @@ async function run() {
         acrepolists = await orgActivity1.getOrgRepo(org); //repo list
         console.log(acrepolists)
          acrepolists.map((item) => {
-             acrepolist.push(item.name,item.created_date)
+             acrepolist.push(item)
              aclRepoList.push(item.name)
          })
          for(repos of aclRepoList ){
@@ -14120,21 +14120,21 @@ async function run() {
     sd = new Date(fromDate).getTime(),
     console.log(ed)
     console.log(sd)
-    filteredrepos = acrepolist.filter(d => {var time = new Date(d.released_on).getDate();
+    filteredrepos = acrepolist.filter(d => {var time = new Date(d.created_date).getDate();
                              return (sd <= time && time <= ed);
                             });
     console.log(filteredrepos);
     // //*****workflowrun */
     ed = new Date(toDate).getTime(),
     sd = new Date(fromDate).getTime(),
-    filteredwfruns = acworkflowrun.filter(d => {var time = new Date(d.released_on).getTime();
+    filteredwfruns = acworkflowrun.filter(d => {var time = new Date(d.created_date).getTime();
                              return (sd <= time && time <= ed);
                             });
     console.log(filteredwfruns);
     // //***********workflows */
     ed = new Date(toDate).getTime(),
     sd = new Date(fromDate).getTime(),
-    filteredworkflows = acworkflow.filter(d => {var time = new Date(d.released_on).getTime();
+    filteredworkflows = acworkflow.filter(d => {var time = new Date(d.created_date).getTime();
                              return (sd <= time && time <= ed);
                             });
     console.log(filteredworkflows);
