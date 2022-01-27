@@ -134,6 +134,8 @@ console.log(uniqueRepos.length,"repo count");
 console.log(totalworkflowrunscount,"count");
 console.log(totalworkflowscount,"final workflow count array");
 
+console.log(finaloutputresult)
+
 saveIntermediateData(outputDir, finaloutput);
 
 
