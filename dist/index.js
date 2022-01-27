@@ -14051,9 +14051,7 @@ async function run() {
     , toDate = core.getInput('todate')
     , runmethod = core.getInput('runmethod')
   ;
-  
- console.log(fromDate)
- console.log(toDate)
+
 
   if (runmethod = "adhoc"){
     //******ADHOC METHOD */  
@@ -14113,10 +14111,13 @@ async function run() {
     console.log(acworkflowrun,"adhoc workflow runs")
     console.log(acworkflow,"adhoc workflows")
     console.log(acrepolist,"adhoc repolist")
+    let fromDate = fromDate;
+    let toDate = toDate;
     ///*******filter using dates */
     const filteredrepos = acrepolist.filter(function(data){
             const releaseYear = new Date(data.releaseDate).getFullYear();
             return (
+                
                 releaseYear >= new Date(fromDate).getFullYear() &&
                 releaseYear <= new Date(toDate).getFullYear()
             );
@@ -14139,6 +14140,7 @@ async function run() {
     const filteredwfruns = acworkflowruns.filter(function(data){
         const releaseYear = new Date(data.releaseDate).getFullYear();
         return (
+            
             releaseYear >= new Date(fromDate).getFullYear() &&
             releaseYear <= new Date(toDate).getFullYear()
         );
