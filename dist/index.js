@@ -14113,66 +14113,66 @@ async function run() {
     console.log(acworkflow,"adhoc workflows")
     console.log(acrepolist,"adhoc repolist")
     ///*******filter using dates */
-    const filteredrepos = acrepolist?.filter(function(data){
-            const releaseYear = new Date(data.releaseDate).getFullYear();
+    const filteredrepos = data1?.filter(function(acrepolist){
+            const releaseYear = new Date(acrepolist.releaseDate).getFullYear();
             return (
                 releaseYear >= new Date(FromDate).getFullYear() &&
                 releaseYear <= new Date(toDate).getFullYear()
             );
     })  
-        filteredrepos = acrepolist?.filter(function(data){
-            const releaseMonth = new Date(data.releaseMonth).getMonth();
+        filteredrepos = data1?.filter(function(acrepolist){
+            const releaseMonth = new Date(acrepolist.releaseMonth).getMonth();
             return (
                 releaseMonth >= new Date(FromDate).getMonth() &&
                 releaseMonth <= new Date(toDate).getMonth()
             );
     })
-        filteredrepos = acrepolist?.filter(function(data){
-            const releaseDate = new Date(data.releaseDate).getDate();
+        filteredrepos = data1?.filter(function(acrepolist){
+            const releaseDate = new Date(acrepolist.releaseDate).getDate();
             return (
                 releaseDate >= new Date(FromDate).getDate() &&
                 releaseDate <= new Date(toDate).getDate()
             );
     })
     // //*****workflowrun */
-    const filteredwfruns = acworkflowruns?.filter(function(data){
-        const releaseYear = new Date(data.releaseDate).getFullYear();
+    const filteredwfruns = data1?.filter(function(acworkflowruns){
+        const releaseYear = new Date(acworkflowruns.releaseDate).getFullYear();
         return (
             releaseYear >= new Date(FromDate).getFullYear() &&
             releaseYear <= new Date(toDate).getFullYear()
         );
     })
-    filteredwfruns = acworkflowruns?.filter(function(data){
-        const releaseMonth = new Date(data.releaseMonth).getMonth();
+    filteredwfruns = data1?.filter(function(acworkflowruns){
+        const releaseMonth = new Date(acworkflowruns.releaseMonth).getMonth();
         return (
             releaseMonth >= new Date(FromDate).getMonth() &&
             releaseMonth <= new Date(toDate).getMonth()
         );
     })
-    filteredwfruns = acworkflowruns?.filter(function(data){
-        const releaseDate = new Date(data.releaseDate).getDate();
+    filteredwfruns = data1?.filter(function(acworkflowruns){
+        const releaseDate = new Date(acworkflowruns.releaseDate).getDate();
         return (
             releaseDate >= new Date(FromDate).getDate() &&
             releaseDate <= new Date(toDate).getDate()
         );
     })
     // //***********workflows */
-    const filteredworkflows = acworkflows?.filter(function(data){
-        const releaseYear = new Date(data.releaseDate).getFullYear();
+    const filteredworkflows = data1?.filter(function(acworkflows){
+        const releaseYear = new Date(acworkflows.releaseDate).getFullYear();
         return (
             releaseYear >= new Date(FromDate).getFullYear() &&
             releaseYear <= new Date(toDate).getFullYear()
         );
     })
-    filteredworkflows = acworkflows?.filter(function(data){
-        const releaseMonth = new Date(data.releaseMonth).getMonth();
+    filteredworkflows = data1?.filter(function(acworkflows){
+        const releaseMonth = new Date(acworkflows.releaseMonth).getMonth();
         return (
             releaseMonth >= new Date(FromDate).getMonth() &&
             releaseMonth <= new Date(toDate).getMonth()
         );
     })
-    filteredworkflows = acworkflows?.filter(function(data){
-        const releaseDate = new Date(data.releaseDate).getDate();
+    filteredworkflows = data1?.filter(function(acworkflows){
+        const releaseDate = new Date(acworkflows.releaseDate).getDate();
         return (
             releaseDate >= new Date(FromDate).getDate() &&
             releaseDate <= new Date(toDate).getDate()
