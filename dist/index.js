@@ -14118,6 +14118,8 @@ async function run() {
     ///********acrepolist */
     ed = new Date(fromDate).getTime(),
     sd = new Date(toDate).getTime(),
+    console.log(ed)
+    console.log(sd)
     filteredrepos = acrepolist.filter(d => {var time = new Date(d.released_on).getTime();
                              return (sd <= time && time <= ed);
                             });
