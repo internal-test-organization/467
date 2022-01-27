@@ -14047,13 +14047,13 @@ async function run() {
     const token = core.getInput('token')
     , outputDir = core.getInput('outputDir')
     , maxRetries = core.getInput('octokit_max_retries')
-    //, fromDate = core.getInput('fromdate')
-    //, toDate = core.getInput('todate')
+    , fromDate = core.getInput('fromdate')
+    , toDate = core.getInput('todate')
     , runmethod = core.getInput('runmethod')
   ;
 
 
-  if (runmethod = "adhoc"){
+  if ( runmethod == "adhoc"){
     //******ADHOC METHOD */  
 
     await io.mkdirP(outputDir)
