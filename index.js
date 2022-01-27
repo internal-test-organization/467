@@ -126,7 +126,7 @@ console.log(uniqueRepos);
 
 let finaloutput = [];
 // /////output//////
-finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": active_user.length,"total_repos":repolists.length,"total_workflow_runs":totalworkflowscount ,"total_workflows":totalworkflowscount})
+finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": activeuser.length,"total_repos":repolists.length,"total_workflow_runs":totalworkflowscount ,"total_workflows":totalworkflowscount})
 finaloutputresult = JSON.stringify(finaloutput)
 console.log(orgs.length,"Organizations");
 console.log(uniqueUsers.length,"user count");
