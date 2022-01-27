@@ -14120,7 +14120,7 @@ async function run() {
     sd = new Date(fromDate).getTime(),
     console.log(ed)
     console.log(sd)
-    filteredrepos = acrepolist.filter(d => {var time = new Date(d.created_date).getDate();
+    filteredrepos = acrepolist.filter(d => {var time = new Date(d.created_date).getTime();
                              return (sd <= time && time <= ed);
                             });
     console.log(filteredrepos);
@@ -14157,7 +14157,7 @@ async function run() {
     let finaloutput = [];
     finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": activeuser.length,"total_repos":filteredrepos.length,"total_workflow_runs":filteredwfruns.length ,"total_workflows":filteredworkflows.length})
     finaloutputresult = JSON.stringify(finaloutput)
-    // console.log(finaloutput)
+    console.log(finaloutput)
     
     saveIntermediateData(outputDir, finaloutput);
     
