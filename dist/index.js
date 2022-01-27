@@ -14114,73 +14114,28 @@ async function run() {
     
      
     ///*******filter using dates */
-     filteredrepos = acrepolist.filter(function(data){
-             releaseYear = new Date(data.releaseDate).getFullYear();
-            return (
-                
-                releaseYear >= new Date(fromDate).getFullYear() &&
-                releaseYear <= new Date(toDate).getFullYear()
-            );
-    })  
-        filteredrepos = acrepolist.filter(function(data){
-             releaseMonth = new Date(data.releaseMonth).getMonth();
-            return (
-                releaseMonth >= new Date(fromDate).getMonth() &&
-                releaseMonth <= new Date(toDate).getMonth()
-            );
-    })
-        filteredrepos = acrepolist.filter(function(data){
-             releaseDate = new Date(data.releaseDate).getDate();
-            return (
-                releaseDate >= new Date(fromDate).getDate() &&
-                releaseDate <= new Date(toDate).getDate()
-            );
-    })
+    
+    ///********acrepolist */
+    ed = new Date(fromDate).getTime(),
+    sd = new Date(toDate).getTime(),
+    filteredrepos = acrepolist.filter(d => {var time = new Date(d.released_on).getTime();
+                             return (sd <= time && time <= ed);
+                            });
+    console.log(filteredrepos);
     // //*****workflowrun */
-     filteredwfruns = acworkflowruns.filter(function(data){
-         releaseYear = new Date(data.releaseDate).getFullYear();
-        return (
-            
-            releaseYear >= new Date(fromDate).getFullYear() &&
-            releaseYear <= new Date(toDate).getFullYear()
-        );
-    })
-    filteredwfruns = acworkflowruns.filter(function(data){
-         releaseMonth = new Date(data.releaseMonth).getMonth();
-        return (
-            releaseMonth >= new Date(fromDate).getMonth() &&
-            releaseMonth <= new Date(toDate).getMonth()
-        );
-    })
-    filteredwfruns = acworkflowruns.filter(function(data){
-         releaseDate = new Date(data.releaseDate).getDate();
-        return (
-            releaseDate >= new Date(fromDate).getDate() &&
-            releaseDate <= new Date(toDate).getDate()
-        );
-    })
+    ed = new Date(fromDate).getTime(),
+    sd = new Date(toDate).getTime(),
+    filteredwfruns = acworkflowrun.filter(d => {var time = new Date(d.released_on).getTime();
+                             return (sd <= time && time <= ed);
+                            });
+    console.log(filteredwfruns);
     // //***********workflows */
-     filteredworkflows = acworkflows.filter(function(data){
-         releaseYear = new Date(data.releaseDate).getFullYear();
-        return (
-            releaseYear >= new Date(fromDate).getFullYear() &&
-            releaseYear <= new Date(toDate).getFullYear()
-        );
-    })
-    filteredworkflows = acworkflows.filter(function(data){
-         releaseMonth = new Date(data.releaseMonth).getMonth();
-        return (
-            releaseMonth >= new Date(fromDate).getMonth() &&
-            releaseMonth <= new Date(toDate).getMonth()
-        );
-    })
-    filteredworkflows = acworkflows.filter(function(data){
-         releaseDate = new Date(data.releaseDate).getDate();
-        return (
-            releaseDate >= new Date(fromDate).getDate() &&
-            releaseDate <= new Date(toDate).getDate()
-        );
-    })
+    ed = new Date(fromDate).getTime(),
+    sd = new Date(toDate).getTime(),
+    filteredworkflows = acworkflow.filter(d => {var time = new Date(d.released_on).getTime();
+                             return (sd <= time && time <= ed);
+                            });
+    console.log(filteredworkflows);
 
     console.log(filteredrepos,"filtered repos with date month and year")
     console.log(filteredwfruns,"filtered workflowruns with date month and year")
@@ -14198,8 +14153,8 @@ async function run() {
         }
     }
     let finaloutput = [];
-    // finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": activeuser.length,"total_repos":filteredrepos.length,"total_workflow_runs":filteredwfruns.length ,"total_workflows":filteredworkflows.length})
-    // finaloutputresult = JSON.stringify(finaloutput)
+    finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": activeuser.length,"total_repos":filteredrepos.length,"total_workflow_runs":filteredwfruns.length ,"total_workflows":filteredworkflows.length})
+    finaloutputresult = JSON.stringify(finaloutput)
     // console.log(finaloutput)
     
     saveIntermediateData(outputDir, finaloutput);
