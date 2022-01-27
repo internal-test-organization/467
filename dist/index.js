@@ -13533,6 +13533,18 @@ module.exports = class Organization {
         });
       });
     }
+    getOrgRepositories(org) {
+      return this.octokit.paginate('GET /orgs/{org}/repos', {org: org, per_page: 100})
+      .then(orgrepos => {
+        console.log(`Processing ${orgrepos.length} repos contributores`);
+        return orgrepos.map(orgrepo => {
+          return {
+            name: orgrepo.name,
+            created_date : orgrepo.created_at
+          };
+        });
+      });
+    }
     getWorkflows(org,reponame){
       return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/workflows', {owner: org,repo: reponame,per_page: 100})
       .then(workflows => {
@@ -13544,6 +13556,32 @@ module.exports = class Organization {
         //     created_date : workflow.created_at
         //   };
         // });
+      });
+    }
+    getActionWorkflows(org,reponame){
+      return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/workflows', {owner: org,repo: reponame,per_page: 100})
+      .then(actionworkflows => {
+        console.log(`Processing ${actionworkflows.length} workflows`);
+        //return workflows.length
+        return actionworkflows.map(actionworkflow => {
+          return {
+            name: actionworkflow.id,
+            created_date : actionworkflow.created_at
+          };
+        });
+      });
+    }
+    getActionWorkFlowRuns(org, reponame) {
+      return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/runs', {owner: org,repo: reponame,per_page: 100})
+      .then(actionworkflowruns => {
+        console.log(`Processing ${actionworkflowruns.length} workflow runs`);
+        //return workflowruns.length
+        return actionworkflowruns.map(actionworkflowrun => {
+          return {
+            name: actionworkflowrun.id,
+            created_date : actionworkflowrun.created_at
+          };
+        });
       });
     }
     getWorkFlowRuns(org, reponame) {
@@ -14006,108 +14044,148 @@ const fs = __nccwpck_require__(7147)
 ;
 
 async function run() {
-  const token = core.getInput('token')
-    // , since = core.getInput('since')
-    // , days = core.getInput('activity_days')
+    const token = core.getInput('token')
     , outputDir = core.getInput('outputDir')
-    //, organizationinp = core.getInput('organization')
     , maxRetries = core.getInput('octokit_max_retries')
+    , FromDate = core.getInput('fromdate')
+    , toDate = core.getInput('todate')
+    , runmethod = core.getInput('runmethod')
   ;
-// console.log(organizationinp)
-// let regex = /^[\w\.\_\-]+((,|-)[\w\.\_\-]+)*[\w\.\_\-]+$/g;
-// let validate_org = regex.test(organizationinp);
-// if((!validate_org)) {
-//   throw new Error('Provide a valid organization - It accept only comma separated value');
-// }
-
-// let sinceregex = /^(20)\d\d-(0[1-9]|1[012])-([012]\d|3[01])T([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/ 
-// ;
-
-await io.mkdirP(outputDir)
-
-const octokit = githubClient.create(token, maxRetries)
-  , orgActivity = new OrganizationActivity(octokit)
-  , orgActivity1 = new Organization(octokit)
-;
-
-// if((!Number(days)) || (days < 0)) {
-//     throw new Error('Provide a valid activity_days - It accept only Positive Number');
-//   }
-
-//***since and fromdate and todate */
-// let fromDate;
-//   if (since) {
-//     let validate_since = sinceregex.test(since);
-//     if((!validate_since)) {
-//       throw new Error('Provide a valid since - It accept only following format - YYYY-MM-DDTHH:mm:ss');
-//     }
-//     console.log(`Since Date has been specified, using that instead of active_days`)
-//     fromDate = dateUtil.getFromDate(since);
-    
-//   } else {
-//     fromDate = dateUtil.convertDaysToDate(days);
-    
-//   }
+  
 
 
+  if (runmethod = "adhoc"){
+    //******ADHOC METHOD */  
 
-////find the organization list
+    await io.mkdirP(outputDir)
 
-
-let orgs = [];
-const orglists = await orgActivity1.getUserOrgs()
-orglists.map((item) => {
-    orgs.push(item.name)
-    console.log(orgs,"list of organization")
-})
-
-let userlist = [];
-let repolist = [];
-let workflowrun  = [];
-let totalworkflowscount = 0 ;
-let totalworkflowrunscount = 0;
-let activeuser = [];
-for(org of orgs){
-    let lRepoList = [];
-    console.log(org)
-    userlists = await orgActivity1.getOrgMembers(org); //user list
-    console.log(userlists)
-    userlists.map((  item) => {
-        userlist.push(item.login)
+    const octokit = githubClient.create(token, maxRetries)
+      , orgActivity = new OrganizationActivity(octokit)
+      , orgActivity1 = new Organization(octokit)
+    ;
+    let orgs = [];
+    const orglists = await orgActivity1.getUserOrgs()
+    orglists.map((item) => {
+        orgs.push(item.name)
+        console.log(orgs,"list of organization")
     })
+    let userlist = [];
+    let acrepolist = [];
     
-
-    repolists = await orgActivity1.getOrgRepo(org); //repo list
-    console.log(repolists)
-     repolists.map((item) => {
-         repolist.push(item.name)
-         lRepoList.push(item.name)
-     })
-    // const userActivity = await orgActivity.getUserActivity(org, fromDate);
-    // const jsonresp = userActivity.map(activity => activity.jsonPayload);
-    // const jsonlist = jsonresp.filter(user => { return user.isActive === false });
-    // console.log(jsonlist)
-
-    for(repos of lRepoList ){
-        console.log(repos)
-        workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
-        console.log(workflowruns,"workflow runs total count")
-        totalworkflowrunscount += workflowruns;
-
-        workflows = await orgActivity1.getWorkflows(org,repos);
-        console.log(workflows,"workflow  total count")
-        totalworkflowscount += workflows;
-
     
-    }
-    // console.log(totalworkflowscount)
-}
+    for(org of orgs){
+        let aclRepoList = [];
+        console.log(org)
+        userlists = await orgActivity1.getOrgMembers(org); //user list
+        console.log(userlists)
+        userlists.map((  item) => {
+            userlist.push(item.login)
+        })
+        acrepolists = await orgActivity1.getOrgRepo(org); //repo list
+        console.log(repolists)
+         acrepolists.map((item) => {
+             acrepolist.push(item.name,item.created_date)
+             aclRepoList.push(item.name)
+         })
+         for(repos of aclRepoList ){
+            console.log(repos)
+            acworkflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
+            console.log(workflowruns,"workflow runs total count")
+            acworkflowruns.map((item) =>{
+                acworkflowrun.push(item.name,item.created_date)
+            })
+    
+            acworkflows = await orgActivity1.getWorkflows(org,repos);
+            console.log(workflows,"workflow  total count")
+            acworkflows.map((item) =>{
+                acworkflow.push(item.name,item.created_date)
+            })
+            
+            
 
-// console.log(userlist,"final user list")
-// console.log(repolist,"final repo list")
-// console.log(totalworkflowscount,"final workflow count array")
-//let uniqueRepos = [...new Set(repolist)];
-let uniqueUsers = [...new Set(userlist)];
+        
+        }
+        
+        
+    } 
+    console.log(acworkflowruns,"adhoc workflow")
+    console.log(acworkflows,"adhoc workflows")
+    console.log(acrepolist,"adhoc repolist")
+    ///*******filter using dates */
+    const filteredrepos = acrepolist?.filter(function(data){
+            const releaseYear = new Date(data.releaseDate).getFullYear();
+            return (
+                releaseYear >= new Date(FromDate).getFullYear() &&
+                releaseYear <= new Date(toDate).getFullYear()
+            );
+    })
+        filteredrepos = acrepolist?.filter(function(data){
+            const releaseMonth = new Date(data.releaseMonth).getMonth();
+            return (
+                releaseMonth >= new Date(FromDate).getMonth() &&
+                releaseMonth <= new Date(toDate).getMonth()
+            );
+    })
+        filteredrepos = acrepolist?.filter(function(data){
+            const releaseDate = new Date(data.releaseDate).getDate();
+            return (
+                releaseDate >= new Date(FromDate).getDate() &&
+                releaseDate <= new Date(toDate).getDate()
+            );
+    })
+    //*****workflowrun */
+    const filteredwfruns = acworkflowruns?.filter(function(data){
+        const releaseYear = new Date(data.releaseDate).getFullYear();
+        return (
+            releaseYear >= new Date(FromDate).getFullYear() &&
+            releaseYear <= new Date(toDate).getFullYear()
+        );
+    })
+    filteredwfruns = acworkflowruns?.filter(function(data){
+        const releaseMonth = new Date(data.releaseMonth).getMonth();
+        return (
+            releaseMonth >= new Date(FromDate).getMonth() &&
+            releaseMonth <= new Date(toDate).getMonth()
+        );
+    })
+    filteredwfruns = acworkflowruns?.filter(function(data){
+        const releaseDate = new Date(data.releaseDate).getDate();
+        return (
+            releaseDate >= new Date(FromDate).getDate() &&
+            releaseDate <= new Date(toDate).getDate()
+        );
+    })
+    //***********workflows */
+    const filteredworkflows = acworkflows?.filter(function(data){
+        const releaseYear = new Date(data.releaseDate).getFullYear();
+        return (
+            releaseYear >= new Date(FromDate).getFullYear() &&
+            releaseYear <= new Date(toDate).getFullYear()
+        );
+    })
+    filteredworkflows = acworkflows?.filter(function(data){
+        const releaseMonth = new Date(data.releaseMonth).getMonth();
+        return (
+            releaseMonth >= new Date(FromDate).getMonth() &&
+            releaseMonth <= new Date(toDate).getMonth()
+        );
+    })
+    filteredworkflows = acworkflows?.filter(function(data){
+        const releaseDate = new Date(data.releaseDate).getDate();
+        return (
+            releaseDate >= new Date(FromDate).getDate() &&
+            releaseDate <= new Date(toDate).getDate()
+        );
+    })
+
+    console.log(filteredrepos,"filtered repos with date month and year")
+    console.log(filteredwfruns,"filtered workflowruns with date month and year")
+    console.log(filteredworkflows,"filtered workflows with date month and year")
+
+    ///*******filter using dates */
+
+    let activeuser = [];
+    let uniqueUsers = [...new Set(userlist)];
     for(user of uniqueUsers){
         userevents = await orgActivity1.getUserEvents(user);
         console.log(userevents)
@@ -14115,35 +14193,101 @@ let uniqueUsers = [...new Set(userlist)];
             activeuser.push(user)
         }
     }
-// console.log(uniqueUsers);
-// console.log(uniqueRepos);
+    let finaloutput = [];
+    finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": activeuser.length,"total_repos":filteredrepos.length,"total_workflow_runs":filteredwfruns.length ,"total_workflows":filteredworkflows.length})
+    finaloutputresult = JSON.stringify(finaloutput)
+    console.log(finaloutput)
+    
+    saveIntermediateData(outputDir, finaloutput);
+    
+    function saveIntermediateData(directory, data) {
+        try {
+            const file = path.join(directory, 'org-overriden-secret.json');
+            fs.writeFileSync(file, JSON.stringify(data));
+            core.setOutput('report_json', file);
+        } catch (err) {
+            console.error(`Failed to save intermediate data: ${err}`);
+        }
+    }   
+  }else{
+      //*****SCHEDULER METHOD */
+      await io.mkdirP(outputDir)
 
-let finaloutput = [];
-// /////output//////
-finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": activeuser.length,"total_repos":repolist.length,"total_workflow_runs":totalworkflowrunscount ,"total_workflows":totalworkflowscount})
-finaloutputresult = JSON.stringify(finaloutput)
-console.log(orgs.length,"Organizations");
-console.log(uniqueUsers.length,"user count");
-console.log(repolist.length,"repo count");
-console.log(activeuser.length,"active user")
-console.log(totalworkflowrunscount,"count");
-console.log(totalworkflowscount,"final workflow count array");
-
-console.log(finaloutput)
-
-saveIntermediateData(outputDir, finaloutput);
-
-
-function saveIntermediateData(directory, data) {
-  try {
-    const file = path.join(directory, 'org-overriden-secret.json');
-    fs.writeFileSync(file, JSON.stringify(data));
-    core.setOutput('report_json', file);
-  } catch (err) {
-    console.error(`Failed to save intermediate data: ${err}`);
+    const octokit = githubClient.create(token, maxRetries)
+      , orgActivity = new OrganizationActivity(octokit)
+      , orgActivity1 = new Organization(octokit)
+    ;
+    let orgs = [];
+    const orglists = await orgActivity1.getUserOrgs()
+    orglists.map((item) => {
+        orgs.push(item.name)
+        console.log(orgs,"list of organization")
+    
+    
+    })
+    
+    let userlist = [];
+    let repolist = [];
+    let totalworkflowscount = 0 ;
+    let totalworkflowrunscount = 0;
+    
+    for(org of orgs){
+        let lRepoList = [];
+        console.log(org)
+        userlists = await orgActivity1.getOrgMembers(org); //user list
+        console.log(userlists)
+        userlists.map((  item) => {
+            userlist.push(item.login)
+        })
+        
+    
+        repolists = await orgActivity1.getOrgRepo(org); //repo list
+        console.log(repolists)
+         repolists.map((item) => {
+             repolist.push(item.name)
+             lRepoList.push(item.name)
+         })
+        
+    
+        for(repos of lRepoList ){
+            console.log(repos)
+            workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
+            console.log(workflowruns,"workflow runs total count")
+            totalworkflowrunscount += workflowruns;
+    
+            workflows = await orgActivity1.getWorkflows(org,repos);
+            console.log(workflows,"workflow  total count")
+            totalworkflowscount += workflows;
+    
+        
+        }
+    }
+    let activeuser = [];
+    let uniqueUsers = [...new Set(userlist)];
+        for(user of uniqueUsers){
+            userevents = await orgActivity1.getUserEvents(user);
+            console.log(userevents)
+            if(userevents > 0){
+                activeuser.push(user)
+            }
+        }
+    let finaloutput = [];
+    finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": activeuser.length,"total_repos":repolist.length,"total_workflow_runs":totalworkflowrunscount ,"total_workflows":totalworkflowscount})
+    finaloutputresult = JSON.stringify(finaloutput)
+    console.log(finaloutput)
+    
+    saveIntermediateData(outputDir, finaloutput);
+    
+    function saveIntermediateData(directory, data) {
+        try {
+          const file = path.join(directory, 'org-overriden-secret.json');
+          fs.writeFileSync(file, JSON.stringify(data));
+          core.setOutput('report_json', file);
+        } catch (err) {
+          console.error(`Failed to save intermediate data: ${err}`);
+        }
+      }
   }
-}
-
 
 
 }
@@ -14156,7 +14300,6 @@ async function execute() {
     }
   }
   execute();
-
 })();
 
 module.exports = __webpack_exports__;

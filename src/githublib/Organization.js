@@ -86,6 +86,18 @@ module.exports = class Organization {
         });
       });
     }
+    getOrgRepositories(org) {
+      return this.octokit.paginate('GET /orgs/{org}/repos', {org: org, per_page: 100})
+      .then(orgrepos => {
+        console.log(`Processing ${orgrepos.length} repos contributores`);
+        return orgrepos.map(orgrepo => {
+          return {
+            name: orgrepo.name,
+            created_date : orgrepo.created_at
+          };
+        });
+      });
+    }
     getWorkflows(org,reponame){
       return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/workflows', {owner: org,repo: reponame,per_page: 100})
       .then(workflows => {
@@ -97,6 +109,32 @@ module.exports = class Organization {
         //     created_date : workflow.created_at
         //   };
         // });
+      });
+    }
+    getActionWorkflows(org,reponame){
+      return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/workflows', {owner: org,repo: reponame,per_page: 100})
+      .then(actionworkflows => {
+        console.log(`Processing ${actionworkflows.length} workflows`);
+        //return workflows.length
+        return actionworkflows.map(actionworkflow => {
+          return {
+            name: actionworkflow.id,
+            created_date : actionworkflow.created_at
+          };
+        });
+      });
+    }
+    getActionWorkFlowRuns(org, reponame) {
+      return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/runs', {owner: org,repo: reponame,per_page: 100})
+      .then(actionworkflowruns => {
+        console.log(`Processing ${actionworkflowruns.length} workflow runs`);
+        //return workflowruns.length
+        return actionworkflowruns.map(actionworkflowrun => {
+          return {
+            name: actionworkflowrun.id,
+            created_date : actionworkflowrun.created_at
+          };
+        });
       });
     }
     getWorkFlowRuns(org, reponame) {
