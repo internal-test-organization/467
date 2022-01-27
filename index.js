@@ -58,13 +58,13 @@ async function run() {
          })
          for(repos of aclRepoList ){
             console.log(repos)
-            acworkflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
+            acworkflowruns = await orgActivity1.getActionWorkFlowRuns(org,repos);
             console.log(acworkflowruns,"workflow runs total count")
             acworkflowruns.map((item) =>{
                 acworkflowrun.push(item)
             })
     
-            acworkflows = await orgActivity1.getWorkflows(org,repos);
+            acworkflows = await orgActivity1.getActionWorkflows(org,repos);
             console.log(acworkflows,"workflow  total count")
             acworkflows.map((item) =>{
                 acworkflow.push(item)
