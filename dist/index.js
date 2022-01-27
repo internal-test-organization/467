@@ -14116,8 +14116,8 @@ async function run() {
     ///*******filter using dates */
     
     ///********acrepolist */
-    ed = new Date(fromDate).getDate(),
-    sd = new Date(toDate).getDate(),
+    ed = new Date(toDate).getTime(),
+    sd = new Date(fromDate).getTime(),
     console.log(ed)
     console.log(sd)
     filteredrepos = acrepolist.filter(d => {var time = new Date(d.released_on).getDate();
@@ -14125,15 +14125,15 @@ async function run() {
                             });
     console.log(filteredrepos);
     // //*****workflowrun */
-    ed = new Date(fromDate).getDate(),
-    sd = new Date(toDate).getDate(),
+    ed = new Date(toDate).getTime(),
+    sd = new Date(fromDate).getTime(),
     filteredwfruns = acworkflowrun.filter(d => {var time = new Date(d.released_on).getTime();
                              return (sd <= time && time <= ed);
                             });
     console.log(filteredwfruns);
     // //***********workflows */
-    ed = new Date(fromDate).getDate(),
-    sd = new Date(toDate).getDate(),
+    ed = new Date(toDate).getTime(),
+    sd = new Date(fromDate).getTime(),
     filteredworkflows = acworkflow.filter(d => {var time = new Date(d.released_on).getTime();
                              return (sd <= time && time <= ed);
                             });
