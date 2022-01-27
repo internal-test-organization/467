@@ -15,12 +15,13 @@ async function run() {
     const token = core.getInput('token')
     , outputDir = core.getInput('outputDir')
     , maxRetries = core.getInput('octokit_max_retries')
-    // , FromDate = core.getInput('fromdate')
-    // , toDate = core.getInput('todate')
-    // , runmethod = core.getInput('runmethod')
+    , FromDate = core.getInput('fromdate')
+    , toDate = core.getInput('todate')
+    , runmethod = core.getInput('runmethod')
   ;
   
-
+ console.log(FromDate)
+ console.log(toDate)
 
   if (runmethod = "adhoc"){
     //******ADHOC METHOD */  
