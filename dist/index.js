@@ -14071,7 +14071,8 @@ async function run() {
     })
     let userlist = [];
     let acrepolist = [];
-    
+    let acworkflowrun = [];
+    let acworkflow = [];
     
     for(org of orgs){
         let aclRepoList = [];
@@ -14092,13 +14093,13 @@ async function run() {
             acworkflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
             console.log(acworkflowruns,"workflow runs total count")
             acworkflowruns.map((item) =>{
-                acworkflowrun.push(item.name,item.created_date)
+                acworkflowrun.push(item)
             })
     
             acworkflows = await orgActivity1.getWorkflows(org,repos);
             console.log(acworkflows,"workflow  total count")
             acworkflows.map((item) =>{
-                acworkflow.push(item.name,item.created_date)
+                acworkflow.push(item)
             })
             
             
@@ -14108,8 +14109,8 @@ async function run() {
         
         
     } 
-    console.log(acworkflowruns,"adhoc workflow")
-    console.log(acworkflows,"adhoc workflows")
+    console.log(acworkflowrun,"adhoc workflow")
+    console.log(acworkflow,"adhoc workflows")
     console.log(acrepolist,"adhoc repolist")
     ///*******filter using dates */
     // const filteredrepos = acrepolist?.filter(function(data){
