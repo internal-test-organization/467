@@ -14093,7 +14093,7 @@ for(org of orgs){
     // const userActivity = await orgActivity.getUserActivity(org, fromDate);
     // const jsonresp = userActivity.map(activity => activity.jsonPayload);
     // const jsonlist = jsonresp.filter(user => { return user.isActive === false });
-    console.log(jsonlist)
+    // console.log(jsonlist)
 
     for(repos of lRepoList ){
         console.log(repos)
