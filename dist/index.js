@@ -13559,6 +13559,21 @@ module.exports = class Organization {
         });
       });
     }
+ 
+    getUserEvents(username) {
+      return this.octokit.paginate('GET /users/{username}/events', { username: username,per_page: 100})
+      .then(userevents => {
+        console.log(`Processing ${userevents.length} workflow runs`);
+        return userevents.length
+        // return userevents.map(userevent => {
+        //   return {
+        //     name: userevent.id,
+        //     created_date : userevent.created_at
+        //   };
+        // });
+      });
+    }
+
     getOrgs(org) {
       return this.octokit.paginate("GET /orgs/:org",
         {
@@ -13585,7 +13600,9 @@ module.exports = class Organization {
           }
         })
     }
-  
+    
+
+
     findUsers(org) {
       return this.octokit.paginate("GET /orgs/:org/members", {org: org, per_page: 100})
         .then(members => {
@@ -13990,8 +14007,8 @@ const fs = __nccwpck_require__(7147)
 
 async function run() {
   const token = core.getInput('token')
-    , since = core.getInput('since')
-    , days = core.getInput('activity_days')
+    // , since = core.getInput('since')
+    // , days = core.getInput('activity_days')
     , outputDir = core.getInput('outputDir')
     //, organizationinp = core.getInput('organization')
     , maxRetries = core.getInput('octokit_max_retries')
@@ -14013,9 +14030,9 @@ const octokit = githubClient.create(token, maxRetries)
   , orgActivity1 = new Organization(octokit)
 ;
 
-if((!Number(days)) || (days < 0)) {
-    throw new Error('Provide a valid activity_days - It accept only Positive Number');
-  }
+// if((!Number(days)) || (days < 0)) {
+//     throw new Error('Provide a valid activity_days - It accept only Positive Number');
+//   }
 
 //***since and fromdate and todate */
 // let fromDate;
@@ -14054,9 +14071,17 @@ for(org of orgs){
     console.log(org)
     userlists = await orgActivity1.getOrgMembers(org); //user list
     console.log(userlists)
-    // userlists.map((  item) => {
-    //     userlist.push(item.login)
-    // })
+    userlists.map((  item) => {
+        userlist.push(item.login)
+    })
+    for(user of userlist){
+        userevents = await orgActivity1.getUserEvents(user);
+        console.log(userevents)
+        if(userevents > 0){
+            activeuser.push(user)
+        }
+    }
+
     repolists = await orgActivity1.getOrgRepo(org); //repo list
     console.log(repolists)
      repolists.map((item) => {
@@ -14067,6 +14092,7 @@ for(org of orgs){
     // const jsonresp = userActivity.map(activity => activity.jsonPayload);
     // const jsonlist = jsonresp.filter(user => { return user.isActive === false });
     console.log(jsonlist)
+
     for(repos of lRepoList ){
         console.log(repos)
         workflowruns = await orgActivity1.getWorkFlowRuns(org,repos);
@@ -14092,7 +14118,7 @@ console.log(uniqueRepos);
 
 
 // /////output//////
-finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"total_repos":repolists.length,"total_workflow_runs":totalworkflowscount ,"total_workflows":totalworkflowscount})
+finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": active_user.length,"total_repos":repolists.length,"total_workflow_runs":totalworkflowscount ,"total_workflows":totalworkflowscount})
 finaloutputresult = JSON.stringify(finaloutput)
 console.log(orgs.length,"Organizations");
 console.log(uniqueUsers.length,"user count");

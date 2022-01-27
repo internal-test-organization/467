@@ -112,6 +112,21 @@ module.exports = class Organization {
         });
       });
     }
+ 
+    getUserEvents(username) {
+      return this.octokit.paginate('GET /users/{username}/events', { username: username,per_page: 100})
+      .then(userevents => {
+        console.log(`Processing ${userevents.length} workflow runs`);
+        return userevents.length
+        // return userevents.map(userevent => {
+        //   return {
+        //     name: userevent.id,
+        //     created_date : userevent.created_at
+        //   };
+        // });
+      });
+    }
+
     getOrgs(org) {
       return this.octokit.paginate("GET /orgs/:org",
         {
@@ -138,7 +153,9 @@ module.exports = class Organization {
           }
         })
     }
-  
+    
+
+
     findUsers(org) {
       return this.octokit.paginate("GET /orgs/:org/members", {org: org, per_page: 100})
         .then(members => {
