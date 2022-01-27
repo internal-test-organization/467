@@ -90,26 +90,26 @@ module.exports = class Organization {
       return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/workflows', {owner: org,repo: reponame,per_page: 100})
       .then(workflows => {
         console.log(`Processing ${workflows.length} workflows`);
-        //return workflows.length
-        return workflows.map(workflow => {
-          return {
-            name: workflow.id,
-            created_date : workflow.created_at
-          };
-        });
+        return workflows.length
+        // return workflows.map(workflow => {
+        //   return {
+        //     name: workflow.id,
+        //     created_date : workflow.created_at
+        //   };
+        // });
       });
     }
     getWorkFlowRuns(org, reponame) {
       return this.octokit.paginate('GET /repos/{owner}/{repo}/actions/runs', {owner: org,repo: reponame,per_page: 100})
       .then(workflowruns => {
         console.log(`Processing ${workflowruns.length} workflow runs`);
-        //return workflowruns.length
-        return workflowruns.map(workflowrun => {
-          return {
-            name: workflowrun.id,
-            created_date : workflowrun.created_at
-          };
-        });
+        return workflowruns.length
+        // return workflowruns.map(workflowrun => {
+        //   return {
+        //     name: workflowrun.id,
+        //     created_date : workflowrun.created_at
+        //   };
+        // });
       });
     }
  
