@@ -244,6 +244,7 @@ async function run() {
     
     let uniqueUsers = [...new Set(userlist)];
     let uniqueactiveuserlist = [...new Set(jsonfinallist)]
+    console.log(uniqueactiveuserlist)
     let finaloutput = [];
     finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": uniqueactiveuserlist.length,"total_repos":repolist.length,"total_workflow_runs":totalworkflowrunscount ,"total_workflows":totalworkflowscount})
     finaloutputresult = JSON.stringify(finaloutput)
