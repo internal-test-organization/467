@@ -13453,7 +13453,22 @@ module.exports = class Organization {
       }
       this._octokit = octokit;
     }
-  
+    
+    getRepositories(org) {
+      return this.octokit.paginate("GET /orgs/:org/repos", {org: org, per_page: 100})
+        .then(repos => {
+          console.log(`Processing ${repos.length} repositories`);
+          return repos.map(repo => { return {
+            name: repo.name,
+            owner: org, //TODO verify this in not in the payload
+            full_name: repo.full_name,
+            has_issues: repo.has_issues,
+            has_projects: repo.has_projects,
+            url: repo.html_url,
+          }});
+        })
+    }
+
     getOrgRepositories(org) {
       return this.octokit.paginate("GET /orgs/:org/repos", {org: org, per_page: 100})
         .then(repos => {
