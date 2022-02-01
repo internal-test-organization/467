@@ -18,6 +18,7 @@ module.exports = {
 }
 
 function getISODate(value) {
+  console.log(value)
   if (!value) {
     throw new Error('A date value must be provided');
   }
