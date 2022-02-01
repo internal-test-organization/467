@@ -14124,9 +14124,9 @@ async function run() {
         })
         const userActivity = await orgActivity.getUserActivity(org,fromDate);
         const jsonresp = userActivity.map(activity => activity.jsonPayload);
-        const jsonlist = jsonresp.filter(user => { return user.isActive === true });
-        jsonfinallist = [...jsonfinallist, ...jsonlist];
-        console.log(jsonfinallist)
+        jsonlist = jsonresp.filter(user => { return user.isActive === true });
+        
+        console.log(jsonlist)
         acrepolists = await orgActivity1.getOrgRepo(org); //repo list
         console.log(acrepolists)
          acrepolists.map((item) => {
@@ -14264,9 +14264,8 @@ async function run() {
         })
         const userActivity = await orgActivity.getUserActivity(org,fromDate);
         const jsonresp = userActivity.map(activity => activity.jsonPayload);
-        const jsonlist = jsonresp.filter(user => { return user.isActive === true });
-        jsonfinallist = [...jsonfinallist, ...jsonlist];
-        console.log(jsonfinallist)
+        jsonlist = jsonresp.filter(user => { return user.isActive === true });
+        console.log(jsonlist)
     
         repolists = await orgActivity1.getOrgRepo(org); //repo list
         console.log(repolists)
