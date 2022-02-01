@@ -14191,17 +14191,11 @@ async function run() {
 
     ///*******filter using dates */
 
-    let activeuser = [];
+    
     let uniqueUsers = [...new Set(userlist)];
-    for(user of uniqueUsers){
-        userevents = await orgActivity1.getUserEvents(user);
-        console.log(userevents)
-        if(userevents > 0){
-            activeuser.push(user)
-        }
-    }
+    let uniqueactiveuserlist = [...new Set(jsonlist)]
     let finaloutput = [];
-    finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": activeuser.length,"total_repos":filteredrepos.length,"total_workflow_runs":filteredwfruns.length ,"total_workflows":filteredworkflows.length})
+    finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": uniqueactiveuserlist.length,"total_repos":filteredrepos.length,"total_workflow_runs":filteredwfruns.length ,"total_workflows":filteredworkflows.length})
     finaloutputresult = JSON.stringify(finaloutput)
     console.log(finaloutput)
     
@@ -14295,17 +14289,12 @@ async function run() {
         
         }
     }
-    let activeuser = [];
+    
+    
     let uniqueUsers = [...new Set(userlist)];
-        for(user of uniqueUsers){
-            userevents = await orgActivity1.getUserEvents(user);
-            console.log(userevents)
-            if(userevents > 0){
-                activeuser.push(user)
-            }
-        }
+    let uniqueactiveuserlist = [...new Set(jsonlist)]
     let finaloutput = [];
-    finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": activeuser.length,"total_repos":repolist.length,"total_workflow_runs":totalworkflowrunscount ,"total_workflows":totalworkflowscount})
+    finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": uniqueactiveuserlist.length,"total_repos":repolist.length,"total_workflow_runs":totalworkflowrunscount ,"total_workflows":totalworkflowscount})
     finaloutputresult = JSON.stringify(finaloutput)
     console.log(finaloutput)
     
