@@ -164,7 +164,7 @@ async function run() {
     let repolist = [];
     let totalworkflowscount = 0 ;
     let totalworkflowrunscount = 0;
-    
+    let jsonfinallist = [];
     
     for(org of orgs){
         let lRepoList = [];
@@ -174,7 +174,11 @@ async function run() {
         userlists.map((  item) => {
             userlist.push(item.login)
         })
-        
+        const userActivity = await orgActivity.getUserActivity(org);
+        const jsonresp = userActivity.map(activity => activity.jsonPayload);
+        const jsonlist = jsonresp.filter(user => { return user.isActive === false });
+        jsonfinallist = [...jsonfinallist, ...jsonlist];
+        console.log(jsonfinallist)
     
         repolists = await orgActivity1.getOrgRepo(org); //repo list
         console.log(repolists)
