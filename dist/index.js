@@ -14124,9 +14124,9 @@ async function run() {
         })
         const userActivity = await orgActivity.getUserActivity(org,fromDate);
         const jsonresp = userActivity.map(activity => activity.jsonPayload);
-        jsonlist = jsonresp.filter(user => { return user.isActive === true });
-        
-        console.log(jsonlist)
+        const jsonlist = jsonresp.filter(user => { return user.isActive === true });
+        jsonfinallist = [...jsonfinallist, ...jsonlist];
+        console.log(jsonfinallist)
         acrepolists = await orgActivity1.getOrgRepo(org); //repo list
         console.log(acrepolists)
          acrepolists.map((item) => {
@@ -14264,8 +14264,9 @@ async function run() {
         })
         const userActivity = await orgActivity.getUserActivity(org,fromDate);
         const jsonresp = userActivity.map(activity => activity.jsonPayload);
-        jsonlist = jsonresp.filter(user => { return user.isActive === true });
-        console.log(jsonlist)
+        const jsonlist = jsonresp.filter(user => { return user.isActive === true });
+        jsonfinallist = [...jsonfinallist, ...jsonlist];
+        console.log(jsonfinallist)
     
         repolists = await orgActivity1.getOrgRepo(org); //repo list
         console.log(repolists)
@@ -14291,7 +14292,7 @@ async function run() {
     
     
     let uniqueUsers = [...new Set(userlist)];
-    let uniqueactiveuserlist = [...new Set(jsonlist)]
+    let uniqueactiveuserlist = [...new Set(jsonfinallist)]
     let finaloutput = [];
     finaloutput.push({"total_orgs": orgs.length,"total_users":uniqueUsers.length,"active_users": uniqueactiveuserlist.length,"total_repos":repolist.length,"total_workflow_runs":totalworkflowrunscount ,"total_workflows":totalworkflowscount})
     finaloutputresult = JSON.stringify(finaloutput)
