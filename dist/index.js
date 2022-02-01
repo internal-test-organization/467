@@ -13243,6 +13243,7 @@ module.exports = {
   convertDaysToDate: (days) => {
     if (days > 0) {
       const offset = DAY_IN_MS * days;
+      console.log(offset)
       return getISODate(Date.now() - offset);
     } else {
       throw new Error(`Invalid number of days; ${days}, must be greater than zero`);
