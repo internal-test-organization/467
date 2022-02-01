@@ -40,7 +40,7 @@ async function run() {
     let acrepolist = [];
     let acworkflowrun = [];
     let acworkflow = [];
-    
+    let jsonfinallist = [];
     for(org of orgs){
         let aclRepoList = [];
         console.log(org)
@@ -49,6 +49,11 @@ async function run() {
         userlists.map((  item) => {
             userlist.push(item.login)
         })
+        const userActivity = await orgActivity.getUserActivity(organization, fromDate);
+        const jsonresp = userActivity.map(activity => activity.jsonPayload);
+        const jsonlist = jsonresp.filter(user => { return user.isActive === false });
+        jsonfinallist = [...jsonfinallist, ...jsonlist];
+        console.log(jsonfinallist)
         acrepolists = await orgActivity1.getOrgRepo(org); //repo list
         console.log(acrepolists)
          acrepolists.map((item) => {
@@ -217,6 +222,7 @@ async function run() {
           console.error(`Failed to save intermediate data: ${err}`);
         }
       }
+    
   }
 
 
