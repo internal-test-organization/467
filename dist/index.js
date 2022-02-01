@@ -13003,7 +13003,7 @@ module.exports = class OrganizationUserActivity {
 
   
 
-  async getUserActivity(org, since) {
+  async getUserActivity(org) {
     const self = this;
 
     const repositories = await self.organizationClient.getRepositories(org)
@@ -13012,7 +13012,7 @@ module.exports = class OrganizationUserActivity {
 
     const activityResults = {};
     for(let idx = 0; idx< repositories.length; idx++) {
-      const repoActivity = await self.repositoryClient.getActivity(repositories[idx], since);
+      const repoActivity = await self.repositoryClient.getActivity(repositories[idx]);
       Object.assign(activityResults, repoActivity);
     }
 
@@ -14081,7 +14081,7 @@ async function run() {
         userlists.map((  item) => {
             userlist.push(item.login)
         })
-        const userActivity = await orgActivity.getUserActivity(organization, fromDate);
+        const userActivity = await orgActivity.getUserActivity(org);
         const jsonresp = userActivity.map(activity => activity.jsonPayload);
         const jsonlist = jsonresp.filter(user => { return user.isActive === false });
         jsonfinallist = [...jsonfinallist, ...jsonlist];

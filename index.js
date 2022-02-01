@@ -49,7 +49,7 @@ async function run() {
         userlists.map((  item) => {
             userlist.push(item.login)
         })
-        const userActivity = await orgActivity.getUserActivity(organization, fromDate);
+        const userActivity = await orgActivity.getUserActivity(org);
         const jsonresp = userActivity.map(activity => activity.jsonPayload);
         const jsonlist = jsonresp.filter(user => { return user.isActive === false });
         jsonfinallist = [...jsonfinallist, ...jsonlist];

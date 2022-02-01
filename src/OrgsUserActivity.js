@@ -22,7 +22,7 @@ module.exports = class OrganizationUserActivity {
 
   
 
-  async getUserActivity(org, since) {
+  async getUserActivity(org) {
     const self = this;
 
     const repositories = await self.organizationClient.getRepositories(org)
@@ -31,7 +31,7 @@ module.exports = class OrganizationUserActivity {
 
     const activityResults = {};
     for(let idx = 0; idx< repositories.length; idx++) {
-      const repoActivity = await self.repositoryClient.getActivity(repositories[idx], since);
+      const repoActivity = await self.repositoryClient.getActivity(repositories[idx]);
       Object.assign(activityResults, repoActivity);
     }
 
