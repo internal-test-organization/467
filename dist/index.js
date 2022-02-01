@@ -14218,7 +14218,7 @@ async function run() {
   }else{
       //*****SCHEDULER METHOD */
       await io.mkdirP(outputDir)
-    
+      console.log(days)
       if((!Number(days)) || (days < 0)) {
         throw new Error('Provide a valid activity_days - It accept only Positive Number');
       }
