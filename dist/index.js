@@ -14124,7 +14124,7 @@ async function run() {
         })
         const userActivity = await orgActivity.getUserActivity(org,fromDate);
         const jsonresp = userActivity.map(activity => activity.jsonPayload);
-        const jsonlist = jsonresp.filter(user => { return user.isActive === false });
+        const jsonlist = jsonresp.filter(user => { return user.isActive === true });
         jsonfinallist = [...jsonfinallist, ...jsonlist];
         console.log(jsonfinallist)
         acrepolists = await orgActivity1.getOrgRepo(org); //repo list
