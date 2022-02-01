@@ -22,10 +22,10 @@ module.exports = class OrganizationUserActivity {
 
   
 
-  async getUserActivity(org) {
+  async getUserActivity(org,since) {
     const self = this;
 
-    const repositories = await self.organizationClient.getRepositories(org)
+    const repositories = await self.organizationClient.getRepositories(org,since)
       , orgUsers = await self.organizationClient.findUsers(org)
     ;
 

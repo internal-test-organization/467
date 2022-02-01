@@ -7,6 +7,15 @@ inputs:
     description:
     required:
 
+  since:
+    description: A date time in format YYYY-MM-DDTHH:mm:ss. If specified activity_days will be ignored.
+    required: false
+
+  activity_days:
+    description: The number of days in the past to check for activity, this will be ignored if 'since' parameter is used.
+    required: true
+    default: 30
+
   runmethod:
     description: Method to run action in adhoc mode or scheduler
     required: true

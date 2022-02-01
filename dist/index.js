@@ -13003,10 +13003,10 @@ module.exports = class OrganizationUserActivity {
 
   
 
-  async getUserActivity(org) {
+  async getUserActivity(org,since) {
     const self = this;
 
-    const repositories = await self.organizationClient.getRepositories(org)
+    const repositories = await self.organizationClient.getRepositories(org,since)
       , orgUsers = await self.organizationClient.findUsers(org)
     ;
 
@@ -14050,6 +14050,8 @@ async function run() {
     , fromDate = core.getInput('fromdate')
     , toDate = core.getInput('todate')
     , runmethod = core.getInput('runmethod')
+    , since = core.getInput('since')
+    , days = core.getInput('activity_days')
   ;
 
 
@@ -14057,6 +14059,34 @@ async function run() {
     //******ADHOC METHOD */  
 
     await io.mkdirP(outputDir)
+    if((removeFlag.toLowerCase() != 'yes') && (removeFlag.toLowerCase() !== 'no')) {
+        throw new Error(`Provide a valid 'remove_flag - Yes/No'.`)
+      }
+    
+      if((!Number(days)) || (days < 0)) {
+        throw new Error('Provide a valid activity_days - It accept only Positive Number');
+      }
+    
+      let regex = /^[\w\.\_\-]+((,|-)[\w\.\_\-]+)*[\w\.\_\-]+$/g;
+      let validate_org = regex.test(organizationinp);
+      if((!validate_org)) {
+        throw new Error('Provide a valid organization - It accept only comma separated value');
+      }
+    
+      let sinceregex = /^(20)\d\d-(0[1-9]|1[012])-([012]\d|3[01])T([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/ 
+    ;
+    
+      let fromDate;
+      if (since) {
+        let validate_since = sinceregex.test(since);
+        if((!validate_since)) {
+          throw new Error('Provide a valid since - It accept only following format - YYYY-MM-DDTHH:mm:ss');
+        }
+        console.log(`Since Date has been specified, using that instead of active_days`)
+        fromDate = dateUtil.getFromDate(since);
+      } else {
+        fromDate = dateUtil.convertDaysToDate(days);
+      }
 
     const octokit = githubClient.create(token, maxRetries)
       , orgActivity = new OrganizationActivity(octokit)
@@ -14178,6 +14208,34 @@ async function run() {
   }else{
       //*****SCHEDULER METHOD */
       await io.mkdirP(outputDir)
+      if((removeFlag.toLowerCase() != 'yes') && (removeFlag.toLowerCase() !== 'no')) {
+        throw new Error(`Provide a valid 'remove_flag - Yes/No'.`)
+      }
+    
+      if((!Number(days)) || (days < 0)) {
+        throw new Error('Provide a valid activity_days - It accept only Positive Number');
+      }
+    
+      let regex = /^[\w\.\_\-]+((,|-)[\w\.\_\-]+)*[\w\.\_\-]+$/g;
+      let validate_org = regex.test(organizationinp);
+      if((!validate_org)) {
+        throw new Error('Provide a valid organization - It accept only comma separated value');
+      }
+    
+      let sinceregex = /^(20)\d\d-(0[1-9]|1[012])-([012]\d|3[01])T([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/ 
+    ;
+    
+      let fromDate;
+      if (since) {
+        let validate_since = sinceregex.test(since);
+        if((!validate_since)) {
+          throw new Error('Provide a valid since - It accept only following format - YYYY-MM-DDTHH:mm:ss');
+        }
+        console.log(`Since Date has been specified, using that instead of active_days`)
+        fromDate = dateUtil.getFromDate(since);
+      } else {
+        fromDate = dateUtil.convertDaysToDate(days);
+      }
 
     const octokit = githubClient.create(token, maxRetries)
       , orgActivity = new OrganizationActivity(octokit)

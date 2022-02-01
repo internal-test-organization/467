@@ -11,6 +11,11 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
+      
+      activity_days:
+        description: The number of days to use to analyze activity
+        default: '30'
+
       runmethod:
         description: Method to run action in adhoc mode or scheduler
         required: true
