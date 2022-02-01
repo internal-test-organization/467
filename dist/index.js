@@ -14122,7 +14122,7 @@ async function run() {
         userlists.map((  item) => {
             userlist.push(item.login)
         })
-        const userActivity = await orgActivity.getUserActivity(org);
+        const userActivity = await orgActivity.getUserActivity(org,fromDate);
         const jsonresp = userActivity.map(activity => activity.jsonPayload);
         const jsonlist = jsonresp.filter(user => { return user.isActive === false });
         jsonfinallist = [...jsonfinallist, ...jsonlist];
@@ -14268,7 +14268,7 @@ async function run() {
         userlists.map((  item) => {
             userlist.push(item.login)
         })
-        const userActivity = await orgActivity.getUserActivity(org);
+        const userActivity = await orgActivity.getUserActivity(org,fromDate);
         const jsonresp = userActivity.map(activity => activity.jsonPayload);
         const jsonlist = jsonresp.filter(user => { return user.isActive === false });
         jsonfinallist = [...jsonfinallist, ...jsonlist];
