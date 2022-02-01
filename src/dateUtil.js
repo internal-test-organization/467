@@ -10,8 +10,7 @@ module.exports = {
     if (days > 0) {
       const offset = DAY_IN_MS * days;
       console.log(offset)
-      value = Date.now() - offset ;
-      return getISODate(value);
+      return getISODate(Date.now() - offset);
     } else {
       throw new Error(`Invalid number of days; ${days}, must be greater than zero`);
     }
