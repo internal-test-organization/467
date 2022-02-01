@@ -14047,7 +14047,7 @@ async function run() {
     const token = core.getInput('token')
     , outputDir = core.getInput('outputDir')
     , maxRetries = core.getInput('octokit_max_retries')
-    , fromDate = core.getInput('fromdate')
+    , fDate = core.getInput('fromdate')
     , toDate = core.getInput('todate')
     , runmethod = core.getInput('runmethod')
     , since = core.getInput('since')
@@ -14059,9 +14059,6 @@ async function run() {
     //******ADHOC METHOD */  
 
     await io.mkdirP(outputDir)
-    if((removeFlag.toLowerCase() != 'yes') && (removeFlag.toLowerCase() !== 'no')) {
-        throw new Error(`Provide a valid 'remove_flag - Yes/No'.`)
-      }
     
       if((!Number(days)) || (days < 0)) {
         throw new Error('Provide a valid activity_days - It accept only Positive Number');
@@ -14152,7 +14149,7 @@ async function run() {
     
     ///********acrepolist */
     ed = new Date(toDate).getTime(),
-    sd = new Date(fromDate).getTime(),
+    sd = new Date(fDate).getTime(),
     console.log(ed)
     console.log(sd)
     filteredrepos = acrepolist.filter(d => {var time = new Date(d.created_date).getTime();
@@ -14161,14 +14158,14 @@ async function run() {
     console.log(filteredrepos);
     // //*****workflowrun */
     ed = new Date(toDate).getTime(),
-    sd = new Date(fromDate).getTime(),
+    sd = new Date(fDate).getTime(),
     filteredwfruns = acworkflowrun.filter(d => {var time = new Date(d.created_date).getTime();
                              return (sd <= time && time <= ed);
                             });
     console.log(filteredwfruns);
     // //***********workflows */
     ed = new Date(toDate).getTime(),
-    sd = new Date(fromDate).getTime(),
+    sd = new Date(fDate).getTime(),
     filteredworkflows = acworkflow.filter(d => {var time = new Date(d.created_date).getTime();
                              return (sd <= time && time <= ed);
                             });
