@@ -49,4 +49,4 @@ jobs:
           runmethod: ${{github.event.inputs.runmethod}}
           fromdate: ${{github.event.inputs.fromdate}}
           todate: ${{github.event.inputs.todate}}
-          
+          activity_days: ${{ github.event.inputs.activity_days }}
